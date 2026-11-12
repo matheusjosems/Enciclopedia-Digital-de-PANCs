@@ -1,0 +1,96 @@
+# Enciclopédia Digital de PANCs: requisitos e APIs
+
+Data: 07/11/2026 · Autor: Matheus de Morais
+
+## Visão geral
+
+A Enciclopédia Digital de PANCs é um sistema web em que o usuário fotografa uma planta, uma IA a identifica e o sistema mostra sua descrição e receitas, guardando cada planta na coleção pessoal do usuário.
+
+O uso acontece em cinco passos:
+
+1. O usuário cria uma conta e faz login.
+2. Tira ou envia a foto de uma planta.
+3. O sistema guarda a foto e a envia à IA, que devolve a planta provável.
+4. O sistema mostra a descrição e as receitas e salva a planta na coleção.
+5. Na enciclopédia, o usuário revê as plantas já descobertas e abre cada uma para consultar descrição e receitas.
+
+## Problema e dor
+
+A dor central é que quem encontra uma PANC não sabe reconhecê-la, não sabe se pode comê-la e não sabe como prepará-la.
+
+- Identificação difícil: muitas PANC se parecem com plantas comuns ou até com espécies tóxicas, e o usuário comum não tem como distingui-las.
+- Informação dispersa: o conhecimento está espalhado em artigos científicos, livros e redes sociais, sem um lugar único e acessível em português.
+- Falta de uso prático: mesmo reconhecendo a planta, faltam receitas e modos de preparo à mão.
+- Pouco engajamento: aprender sobre plantas é um processo lento, sem registro do que já foi descoberto.
+
+O sistema responde a isso reunindo identificação por foto, ficha da planta e receitas em um só lugar, e estimula o uso contínuo ao guardar cada descoberta em uma coleção pessoal.
+
+## Público-alvo
+
+O público principal é formado por pessoas curiosas sobre alimentação saudável e sustentável que usam o celular para registrar o que encontram.
+
+| Perfil | O que busca |
+| --- | --- |
+| Curiosos e entusiastas de alimentação saudável | Descobrir plantas comestíveis e aprender a cozinhá-las |
+| Estudantes e professores (biologia, agroecologia, nutrição) | Material de consulta e apoio a aulas e trabalhos |
+| Agricultores familiares e quem mantém hortas | Reconhecer plantas espontâneas e aproveitá-las na cozinha |
+| Cozinheiros e chefs | Ingredientes diferentes e ideias de receitas |
+| Trilheiros e turistas | Identificar plantas durante passeios e trilhas |
+
+## Requisitos funcionais
+
+O sistema tem 14 requisitos funcionais, cada um ligado à API que o atende.
+
+| ID | Requisito | API relacionada |
+| --- | --- | --- |
+| RF01 | O usuário deve poder criar uma conta com nome, e-mail e senha. | `POST /auth/cadastro` |
+| RF02 | O usuário deve poder fazer login e logout. | `POST /auth/login` |
+| RF03 | O usuário deve poder ver seu perfil e suas estatísticas, como o número de plantas descobertas. | `GET /usuarios/me` |
+| RF04 | O usuário deve poder enviar a foto de uma planta, tirada na hora ou da galeria. | `POST /identificacoes` |
+| RF05 | O sistema deve identificar a planta pela foto, usando IA, e informar o nível de confiança. | `POST /identificacoes` |
+| RF06 | O sistema deve exibir a ficha da planta: nome popular, nome científico, descrição, partes comestíveis e cuidados. | `GET /plantas/{id}` |
+| RF07 | O sistema deve exibir as receitas feitas com a planta identificada. | `GET /plantas/{id}/receitas` |
+| RF08 | O usuário deve poder salvar a planta identificada em sua coleção, com a foto e a data da descoberta. | `POST /colecao` |
+| RF09 | O usuário deve poder listar as plantas já descobertas em sua coleção. | `GET /colecao` |
+| RF10 | O usuário deve poder abrir os detalhes de uma descoberta, com sua foto e as receitas. | `GET /colecao/{id}` |
+| RF11 | O usuário deve poder remover uma planta da coleção. | `DELETE /colecao/{id}` |
+| RF12 | O usuário deve poder consultar o catálogo de PANC e buscar por nome. | `GET /plantas` |
+| RF13 | O usuário deve poder abrir uma receita com ingredientes e modo de preparo. | `GET /receitas/{id}` |
+| RF14 | O sistema deve avisar que a identificação por IA é aproximada e que a planta deve ser confirmada antes de ser consumida. | `POST /identificacoes` (resposta) |
+
+## Requisitos não funcionais
+
+O sistema tem 9 requisitos não funcionais; as metas numéricas são propostas iniciais, a ajustar com o professor.
+
+| ID | Categoria | Requisito |
+| --- | --- | --- |
+| RNF01 | Desempenho | A identificação de uma planta deve responder em até 10 segundos em condições normais de rede. |
+| RNF02 | Segurança | As senhas devem ser guardadas com hash, e a comunicação deve usar HTTPS. |
+| RNF03 | Segurança | As rotas de coleção e perfil devem exigir token de acesso, e cada usuário só pode acessar a própria coleção. |
+| RNF04 | Privacidade | Fotos e dados pessoais devem ser tratados conforme a LGPD, com possibilidade de excluir a conta e seus dados. |
+| RNF05 | Usabilidade | A interface deve ser responsiva e fácil de usar no celular, em português. |
+| RNF06 | Compatibilidade | O sistema deve funcionar nas versões atuais do Chrome, Firefox, Edge e Safari. |
+| RNF07 | Confiabilidade | Se a IA falhar ou tiver baixa confiança, o sistema deve avisar e permitir enviar outra foto, sem perder a sessão. |
+| RNF08 | Restrição de arquivos | As fotos devem ser JPG ou PNG, com até 5 MB. |
+| RNF09 | Manutenibilidade | O back-end deve seguir o padrão REST, com as APIs documentadas e o código versionado no Git. |
+
+## APIs do sistema
+
+O back-end oferece 12 APIs REST, organizadas em cinco grupos, e usa uma API externa de IA de visão para identificar as plantas.
+
+| Nº | Grupo | Método e rota | Descrição |
+| --- | --- | --- | --- |
+| 1 | Autenticação | `POST /auth/cadastro` | Cria uma conta com nome, e-mail e senha. |
+| 2 | Autenticação | `POST /auth/login` | Valida as credenciais e devolve um token de acesso. |
+| 3 | Autenticação | `GET /usuarios/me` | Retorna os dados e as estatísticas do usuário logado, como plantas descobertas. |
+| 4 | Identificação | `POST /identificacoes` | Recebe a foto, envia para a IA e devolve a planta provável com o nível de confiança. |
+| 5 | Plantas | `GET /plantas` | Lista o catálogo de PANC, com busca por nome. |
+| 6 | Plantas | `GET /plantas/{id}` | Retorna a ficha completa: nome popular, nome científico, descrição, partes comestíveis e cuidados. |
+| 7 | Coleção | `POST /colecao` | Salva uma planta identificada na coleção do usuário, com a foto e a data da descoberta. |
+| 8 | Coleção | `GET /colecao` | Lista as plantas já descobertas pelo usuário. |
+| 9 | Coleção | `GET /colecao/{id}` | Mostra os detalhes de uma descoberta, com a foto do usuário e as receitas. |
+| 10 | Coleção | `DELETE /colecao/{id}` | Remove uma planta da coleção. |
+| 11 | Receitas | `GET /plantas/{id}/receitas` | Lista as receitas feitas com a planta. |
+| 12 | Receitas | `GET /receitas/{id}` | Retorna uma receita com ingredientes e modo de preparo. |
+
+A API externa de IA é chamada pelo back-end dentro de `POST /identificacoes`; qual serviço usar ainda precisa ser definido com o professor.
