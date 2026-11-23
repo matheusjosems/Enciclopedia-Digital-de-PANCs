@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enciclopédia Digital de PANCs — Catálogo</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
+
+  <!-- Header / Navbar -->
+  <div id="navbar-container"></div>
+
+  <!-- Hero Section -->
+  <header class="bg-gradient-to-br from-emerald-800 via-emerald-700 to-teal-800 text-white py-12 px-4 shadow-inner">
+    <div class="max-w-5xl mx-auto text-center space-y-4">
+      <span class="inline-block bg-emerald-900/60 text-emerald-200 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">
+        Plantas Alimentícias Não Convencionais do Cerrado
+      </span>
+      <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight">
+        Descubra os Sabores Espontâneos da Natureza
+      </h1>
+      <p class="text-emerald-100 max-w-2xl mx-auto text-sm sm:text-base">
+        Explore nosso catálogo completo com 63 espécies comestíveis, fichas técnicas botânicas, 
+        cuidados de manuseio e receitas tradicionais da culinária regional.
+      </p>
+
+      <!-- Barra de Pesquisa em Tempo Real -->
+      <div class="max-w-2xl mx-auto mt-6">
+        <div class="relative flex items-center">
+          <input 
+            type="text" 
+            id="input-busca"
+            placeholder="Pesquise por nome popular (ex: Ora-pro-nóbis) ou científico (ex: Pereskia)..."
+            class="w-full pl-12 pr-10 py-3.5 rounded-xl bg-white text-slate-900 placeholder-slate-400 text-sm sm:text-base shadow-lg focus:outline-none focus:ring-4 focus:ring-emerald-400 transition"
+          >
+          <span class="absolute left-4 text-slate-400 text-lg">🔍</span>
+          <button 
+            id="btn-limpar-busca" 
+            class="hidden absolute right-3 text-slate-400 hover:text-slate-600 text-sm bg-slate-100 px-2 py-1 rounded-md transition"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <!-- Filtros rápidos de Bioma/Região -->
+      <div class="flex flex-wrap justify-center gap-2 pt-3 text-xs sm:text-sm">
+        <button class="filtro-btn active bg-emerald-900/80 hover:bg-emerald-900 text-white px-3 py-1.5 rounded-full transition" data-regiao="">
+          Todos
+        </button>
+        <button class="filtro-btn bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-full transition" data-regiao="Cerrado">
+          Cerrado
+        </button>
+        <button class="filtro-btn bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-full transition" data-regiao="Mata Atlântica">
+          Mata Atlântica
+        </button>
+        <button class="filtro-btn bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-full transition" data-regiao="Caatinga">
+          Caatinga
+        </button>
+        <button class="filtro-btn bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-full transition" data-regiao="Amazônia">
+          Amazônia
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Conteúdo Principal / Grid de Plantas -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1">
+    <!-- Cabeçalho do Catálogo -->
+    <div class="flex justify-between items-center mb-6">
+      <div>
+        <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Catálogo de Espécies</h2>
+        <p id="contador-plantas" class="text-xs sm:text-sm text-slate-500">Carregando catálogo...</p>
+      </div>
+    </div>
+
+    <!-- Spinner de Loading -->
+    <div id="loading" class="flex justify-center items-center py-20">
+      <div class="animate-spin rounded-full h-12 w-12 border-4 border-emerald-600 border-t-transparent"></div>
+    </div>
+
+    <!-- Mensagem de Nenhuma Planta Encontrada -->
+    <div id="mensagem-vazio" class="hidden text-center py-16">
+      <span class="text-5xl">🌱</span>
+      <h3 class="mt-4 text-lg font-semibold text-slate-700">Nenhuma PANC encontrada</h3>
+      <p class="text-slate-500 text-sm mt-1">Tente pesquisar com outro termo ou remover os filtros de bioma.</p>
+    </div>
+
+    <!-- Grid de Cards de Plantas -->
+    <div id="grid-plantas" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <!-- Inserido dinamicamente via JS -->
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-slate-900 text-slate-400 py-6 text-center text-xs border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4">
+      <p>🌿 <strong>Enciclopédia Digital de PANCs</strong> — Projeto de Desenvolvimento de Sistemas (CEUB)</p>
+      <p class="mt-1 text-slate-500">Dados botânicos e culinários catalogados para o bioma Cerrado brasileiro.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="/static/app.js"></script>
+  <script>
+    let todasPlantas = [];
+    let regiaoSelecionada = "";
+    let timeoutBusca = null;
+
+    async function carregarPlantas(termo = "", regiao = "") {
+      const loading = document.getElementById("loading");
+      const grid = document.getElementById("grid-plantas");
+      const vazio = document.getElementById("mensagem-vazio");
+      const contador = document.getElementById("contador-plantas");
+
+      loading.classList.remove("hidden");
+      grid.innerHTML = "";
+      vazio.classList.add("hidden");
+
+      try {
+        let url = "/plantas?limit=100";
+        if (termo) url += `&nome=${encodeURIComponent(termo)}`;
+        if (regiao) url += `&regiao=${encodeURIComponent(regiao)}`;
+
+        const res = await apiFetch(url);
+        if (!res.ok) throw new Error("Falha ao carregar catálogo.");
+
+        const plantas = await res.json();
+        todasPlantas = plantas;
+
+        loading.classList.add("hidden");
+        contador.textContent = `Exibindo ${plantas.length} espécie(s) catalogada(s)`;
+
+        if (plantas.length === 0) {
+          vazio.classList.remove("hidden");
+          return;
+        }
+
+        plantas.forEach(p => {
+          const card = document.createElement("div");
+          card.className = "bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200/80 card-transition flex flex-col justify-between";
+
+          // Fallback seguro de imagem
+          const fotoUrl = p.foto_url && p.foto_url.trim() !== "" 
+            ? p.foto_url 
+            : "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=500&auto=format&fit=crop&q=60";
+
+          // Tags de regiões (até 3)
+          const tagsRegioes = (p.regioes || []).slice(0, 3).map(r => 
+            `<span class="badge-bioma">${r.nome}</span>`
+          ).join(" ");
+
+          card.innerHTML = `
+            <div>
+              <div class="relative h-48 w-full bg-slate-100 overflow-hidden">
+                <img 
+                  src="${fotoUrl}" 
+                  alt="${p.nome_popular}" 
+                  loading="lazy"
+                  class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                  onerror="this.src='https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=500&auto=format&fit=crop&q=60'"
+                >
+                <span class="absolute top-3 right-3 bg-slate-900/70 backdrop-blur-sm text-white text-[11px] font-medium px-2.5 py-1 rounded-full">
+                  ${p.familia || 'Espécie PANC'}
+                </span>
+              </div>
+              <div class="p-4 space-y-2">
+                <h3 class="font-bold text-base text-slate-900 leading-snug line-clamp-1">${p.nome_popular}</h3>
+                <p class="text-xs italic text-emerald-700 font-medium">${p.nome_cientifico}</p>
+                <p class="text-xs text-slate-500 line-clamp-2">${p.descricao || 'Espécie botânica com propriedades alimentícias e medicinais espontâneas.'}</p>
+                <div class="pt-2 flex flex-wrap gap-1.5">
+                  ${tagsRegioes}
+                </div>
+              </div>
+            </div>
+            <div class="p-4 pt-0">
+              <a 
+                href="/planta/${p.id_planta}" 
+                class="block w-full text-center bg-emerald-50 hover:bg-emerald-600 text-emerald-800 hover:text-white font-semibold text-xs sm:text-sm py-2.5 rounded-xl border border-emerald-200 hover:border-emerald-600 transition duration-200"
+              >
+                Ver Ficha & Receitas →
+              </a>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+
+      } catch (err) {
+        loading.classList.add("hidden");
+        vazio.classList.remove("hidden");
+        vazio.innerHTML = `
+          <span class="text-5xl">⚠️</span>
+          <h3 class="mt-4 text-lg font-semibold text-red-600">Erro ao consultar catálogo</h3>
+          <p class="text-slate-500 text-sm">${err.message}</p>
+        `;
+      }
+    }
+
+    // Configuração dos Event Listeners
+    document.addEventListener("DOMContentLoaded", () => {
+      carregarPlantas();
+
+      const inputBusca = document.getElementById("input-busca");
+      const btnLimpar = document.getElementById("btn-limpar-busca");
+
+      // Busca com Debounce (300ms)
+      inputBusca.addEventListener("input", (e) => {
+        const termo = e.target.value.trim();
+        if (termo) {
+          btnLimpar.classList.remove("hidden");
+        } else {
+          btnLimpar.classList.add("hidden");
+        }
+
+        clearTimeout(timeoutBusca);
+        timeoutBusca = setTimeout(() => {
+          carregarPlantas(termo, regiaoSelecionada);
+        }, 300);
+      });
+
+      btnLimpar.addEventListener("click", () => {
+        inputBusca.value = "";
+        btnLimpar.classList.add("hidden");
+        carregarPlantas("", regiaoSelecionada);
+      });
+
+      // Filtros rápidos de Bioma
+      document.querySelectorAll(".filtro-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".filtro-btn").forEach(b => {
+            b.classList.remove("active", "bg-emerald-900/80");
+            b.classList.add("bg-white/20");
+          });
+          btn.classList.add("active", "bg-emerald-900/80");
+          btn.classList.remove("bg-white/20");
+
+          regiaoSelecionada = btn.getAttribute("data-regiao");
+          carregarPlantas(inputBusca.value.trim(), regiaoSelecionada);
+        });
+      });
+    });
+  </script>
+</body>
+</html>

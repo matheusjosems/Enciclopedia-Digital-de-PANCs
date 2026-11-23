@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ficha da Planta — Enciclopédia de PANCs</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
+
+  <div id="navbar-container"></div>
+
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full">
+    <!-- Breadcrumb de Navegação -->
+    <nav class="flex items-center space-x-2 text-xs sm:text-sm text-slate-500 mb-6">
+      <a href="/" class="hover:text-emerald-700 transition">Catálogo</a>
+      <span>/</span>
+      <span id="breadcrumb-nome" class="text-slate-800 font-semibold">Carregando...</span>
+    </nav>
+
+    <!-- Loading State -->
+    <div id="loading-planta" class="flex justify-center items-center py-24">
+      <div class="animate-spin rounded-full h-12 w-12 border-4 border-emerald-600 border-t-transparent"></div>
+    </div>
+
+    <!-- Conteúdo da Ficha -->
+    <div id="conteudo-planta" class="hidden space-y-8">
+      
+      <!-- Cartão Principal / Hero da PANC -->
+      <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden grid grid-cols-1 md:grid-cols-2 gap-6 p-6 sm:p-8">
+        <!-- Foto da Espécie -->
+        <div class="relative h-72 sm:h-96 rounded-2xl overflow-hidden bg-slate-100 shadow-inner">
+          <img 
+            id="foto-planta" 
+            src="" 
+            alt="Foto da PANC" 
+            class="w-full h-full object-cover"
+            onerror="this.src='https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=500&auto=format&fit=crop&q=60'"
+          >
+          <span id="badge-familia" class="absolute top-4 left-4 bg-slate-900/80 backdrop-blur-sm text-white text-xs font-semibold px-3 py-1.5 rounded-full">
+            Família Botânica
+          </span>
+        </div>
+
+        <!-- Dados e Título -->
+        <div class="flex flex-col justify-between space-y-4">
+          <div>
+            <span class="text-xs font-semibold uppercase tracking-wider text-emerald-700">Ficha Técnica Oficial</span>
+            <h1 id="nome-popular" class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-1">Nome Popular</h1>
+            <p id="nome-cientifico" class="text-base sm:text-lg italic text-slate-500 font-medium">Nome científico</p>
+
+            <div class="mt-4 pt-4 border-t border-slate-100 space-y-3">
+              <div>
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-wide">Perfil de Sabor:</span>
+                <p id="sabor-planta" class="text-sm font-medium text-slate-700 mt-0.5">Suave, terroso</p>
+              </div>
+
+              <div>
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-wide">Ocorrência Regional / Biomas:</span>
+                <div id="lista-regioes" class="flex flex-wrap gap-1.5 mt-1">
+                  <!-- Regiões dinâmicas -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ação Rápida de Coleção -->
+          <div class="pt-4 border-t border-slate-100">
+            <button 
+              id="btn-adicionar-colecao"
+              class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-4 rounded-xl shadow-md transition flex items-center justify-center space-x-2 text-sm sm:text-base"
+            >
+              <span>⭐</span>
+              <span>Adicionar à Minha Coleção</span>
+            </button>
+            <p id="msg-colecao" class="text-xs text-center mt-2 font-medium"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Abas de Informações Detalhadas -->
+      <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+        <!-- Navegação das Abas -->
+        <div class="flex border-b border-slate-200 bg-slate-50/70 text-sm font-semibold">
+          <button class="aba-btn active py-4 px-6 text-emerald-800 border-b-2 border-emerald-600 bg-white transition" data-aba="descricao">
+            📖 Descrição Botânica
+          </button>
+          <button class="aba-btn py-4 px-6 text-slate-500 hover:text-slate-800 border-b-2 border-transparent transition" data-aba="cuidados">
+            ⚠️ Partes Comestíveis & Cuidados
+          </button>
+          <button class="aba-btn py-4 px-6 text-slate-500 hover:text-slate-800 border-b-2 border-transparent transition" data-aba="receitas">
+            🍳 Receitas Culinárias (<span id="cont-receitas">0</span>)
+          </button>
+        </div>
+
+        <!-- Conteúdo da Aba Descrição -->
+        <div id="aba-descricao" class="p-6 sm:p-8 space-y-4">
+          <h3 class="text-lg font-bold text-slate-800">Sobre a Espécie</h3>
+          <p id="texto-descricao" class="text-slate-600 leading-relaxed whitespace-pre-line text-sm sm:text-base">
+            Informações detalhadas sobre a planta...
+          </p>
+        </div>
+
+        <!-- Conteúdo da Aba Cuidados / Partes Comestíveis (RF06, RF14) -->
+        <div id="aba-cuidados" class="hidden p-6 sm:p-8 space-y-6">
+          <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-5">
+            <h4 class="text-emerald-900 font-bold text-base flex items-center space-x-2">
+              <span>🥗</span>
+              <span>Partes Comestíveis</span>
+            </h4>
+            <p id="texto-partes" class="text-emerald-800 text-sm mt-1">Folhas, flores e brotos jovens.</p>
+          </div>
+
+          <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5">
+            <h4 class="text-amber-900 font-bold text-base flex items-center space-x-2">
+              <span>⚠️</span>
+              <span>Cuidados no Preparo e Consumo</span>
+            </h4>
+            <p id="texto-cuidados" class="text-amber-800 text-sm mt-1 whitespace-pre-line">
+              Recomendações e precauções botânicas...
+            </p>
+          </div>
+
+          <div class="bg-slate-100 rounded-2xl p-4 text-xs text-slate-500">
+            <strong>Aviso de Segurança Alimentar (RF14):</strong> A identificação botânica deve ser sempre confirmada com fontes seguras ou especialistas antes do consumo de qualquer espécie silvestre.
+          </div>
+        </div>
+
+        <!-- Conteúdo da Aba Receitas (RF07, RF13) -->
+        <div id="aba-receitas" class="hidden p-6 sm:p-8 space-y-6">
+          <div class="flex justify-between items-center">
+            <h3 class="text-lg font-bold text-slate-800">Receitas Sugeridas</h3>
+            <span class="text-xs text-slate-500 font-medium">Extraído da sabedoria gastronômica regional</span>
+          </div>
+
+          <div id="lista-receitas-grid" class="grid grid-cols-1 gap-6">
+            <!-- Cards de receitas inseridos via JS -->
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="bg-slate-900 text-slate-400 py-6 text-center text-xs">
+    <p>🌿 Enciclopédia Digital de PANCs — Ciência da Computação (CEUB)</p>
+  </footer>
+
+  <script src="/static/app.js"></script>
+  <script>
+    // Extrai o ID da planta a partir da URL (/planta/{id})
+    function getIdPlantaFromUrl() {
+      const pathParts = window.location.pathname.split("/").filter(Boolean);
+      const ultimo = pathParts[pathParts.length - 1];
+      if (!isNaN(ultimo)) return parseInt(ultimo);
+      const urlParams = new URLSearchParams(window.location.search);
+      return parseInt(urlParams.get("id")) || 1;
+    }
+
+    async function carregarFichaPlanta() {
+      const id = getIdPlantaFromUrl();
+      const loading = document.getElementById("loading-planta");
+      const conteudo = document.getElementById("conteudo-planta");
+
+      try {
+        // Busca os dados da planta
+        const resPlanta = await apiFetch(`/plantas/${id}`);
+        if (!resPlanta.ok) throw new Error("Planta não encontrada no catálogo.");
+        const planta = await resPlanta.json();
+
+        // Busca as receitas da planta
+        const resRec = await apiFetch(`/plantas/${id}/receitas`);
+        const receitas = resRec.ok ? await resRec.json() : [];
+
+        // Preenche dados na tela
+        document.getElementById("breadcrumb-nome").textContent = planta.nome_popular;
+        document.getElementById("nome-popular").textContent = planta.nome_popular;
+        document.getElementById("nome-cientifico").textContent = planta.nome_cientifico;
+        document.getElementById("badge-familia").textContent = planta.familia || "PANC do Cerrado";
+        document.getElementById("sabor-planta").textContent = planta.sabor || "Neutro, suave e aromático.";
+        document.getElementById("texto-descricao").textContent = planta.descricao || "Descrição botânica da espécie.";
+        document.getElementById("texto-partes").textContent = planta.partes_comestiveis || "Folhas e partes aéreas.";
+        document.getElementById("texto-cuidados").textContent = planta.cuidados || "Lavar bem em água corrente e preparar refogado ou cozido.";
+
+        const fotoEl = document.getElementById("foto-planta");
+        fotoEl.src = planta.foto_url || "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=500&auto=format&fit=crop&q=60";
+
+        // Regiões
+        const containerRegioes = document.getElementById("lista-regioes");
+        containerRegioes.innerHTML = (planta.regioes || []).map(r => 
+          `<span class="badge-bioma">${r.nome}</span>`
+        ).join(" ") || '<span class="text-xs text-slate-400">Ampla distribuição</span>';
+
+        // Receitas
+        document.getElementById("cont-receitas").textContent = receitas.length;
+        const gridRec = document.getElementById("lista-receitas-grid");
+        gridRec.innerHTML = "";
+
+        if (receitas.length === 0) {
+          gridRec.innerHTML = `
+            <div class="text-center py-8 text-slate-400">
+              <span>🍳</span>
+              <p class="text-sm mt-1">Nenhuma receita cadastrada especificamente para esta planta ainda.</p>
+            </div>
+          `;
+        } else {
+          receitas.forEach(r => {
+            const cardRec = document.createElement("div");
+            cardRec.className = "bg-slate-50 border border-slate-200 rounded-2xl p-6 space-y-4 shadow-sm";
+            cardRec.innerHTML = `
+              <div class="flex justify-between items-start flex-wrap gap-2">
+                <div>
+                  <h4 class="text-lg font-bold text-emerald-900">${r.titulo}</h4>
+                  <div class="flex items-center space-x-4 text-xs text-slate-500 mt-1">
+                    <span>⏱️ Tempo: ${r.tempo_preparo || '20 min'}</span>
+                    <span>🍽️ Rendimento: ${r.rendimento || '2 a 4 porções'}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-slate-200">
+                <div>
+                  <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Ingredientes:</span>
+                  <p class="text-sm text-slate-700 mt-1 whitespace-pre-line leading-relaxed">${r.ingredientes}</p>
+                </div>
+                <div>
+                  <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Modo de Preparo:</span>
+                  <p class="text-sm text-slate-700 mt-1 whitespace-pre-line leading-relaxed">${r.modo_preparo}</p>
+                </div>
+              </div>
+            `;
+            gridRec.appendChild(cardRec);
+          });
+        }
+
+        // Configuração do Botão Salvar na Coleção (RF08)
+        const btnColecao = document.getElementById("btn-adicionar-colecao");
+        const msgColecao = document.getElementById("msg-colecao");
+
+        btnColecao.addEventListener("click", async () => {
+          if (!getToken()) {
+            msgColecao.className = "text-xs text-center mt-2 font-medium text-amber-600";
+            msgColecao.innerHTML = "Faça <a href='/login' class='underline font-bold'>login</a> para salvar plantas na sua coleção pessoal.";
+            return;
+          }
+
+          try {
+            btnColecao.disabled = true;
+            btnColecao.textContent = "Salvando...";
+            const resCol = await apiFetch("/colecao", {
+              method: "POST",
+              body: JSON.stringify({ id_planta: planta.id_planta })
+            });
+
+            if (resCol.ok) {
+              msgColecao.className = "text-xs text-center mt-2 font-medium text-emerald-600";
+              msgColecao.textContent = "✅ Planta adicionada com sucesso à sua coleção!";
+              btnColecao.textContent = "⭐ Salva na Coleção";
+              btnColecao.classList.add("bg-emerald-800");
+            } else {
+              const errData = await resCol.json();
+              msgColecao.className = "text-xs text-center mt-2 font-medium text-red-600";
+              msgColecao.textContent = errData.detail || "Erro ao salvar planta.";
+              btnColecao.disabled = false;
+              btnColecao.textContent = "⭐ Adicionar à Minha Coleção";
+            }
+          } catch (e) {
+            msgColecao.className = "text-xs text-center mt-2 font-medium text-red-600";
+            msgColecao.textContent = "Erro de conexão ao salvar na coleção.";
+            btnColecao.disabled = false;
+            btnColecao.textContent = "⭐ Adicionar à Minha Coleção";
+          }
+        });
+
+        loading.classList.add("hidden");
+        conteudo.classList.remove("hidden");
+
+      } catch (err) {
+        loading.classList.add("hidden");
+        document.querySelector("main").innerHTML = `
+          <div class="text-center py-16">
+            <span class="text-5xl">⚠️</span>
+            <h2 class="text-xl font-bold text-red-600 mt-4">Erro ao Carregar Ficha</h2>
+            <p class="text-slate-500 text-sm mt-1">${err.message}</p>
+            <a href="/" class="mt-6 inline-block bg-emerald-600 text-white text-sm font-semibold px-4 py-2 rounded-lg">Voltar ao Catálogo</a>
+          </div>
+        `;
+      }
+    }
+
+    // Controle de Abas
+    document.addEventListener("DOMContentLoaded", () => {
+      carregarFichaPlanta();
+
+      document.querySelectorAll(".aba-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".aba-btn").forEach(b => {
+            b.classList.remove("active", "text-emerald-800", "border-emerald-600", "bg-white");
+            b.classList.add("text-slate-500", "border-transparent");
+          });
+          btn.classList.add("active", "text-emerald-800", "border-emerald-600", "bg-white");
+          btn.classList.remove("text-slate-500", "border-transparent");
+
+          const abaId = btn.getAttribute("data-aba");
+          document.querySelectorAll("[id^='aba-']").forEach(div => div.classList.add("hidden"));
+          document.getElementById(`aba-${abaId}`).classList.remove("hidden");
+        });
+      });
+    });
+  </script>
+</body>
+</html>

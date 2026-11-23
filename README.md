@@ -60,10 +60,11 @@ O planejamento do desenvolvimento deste projeto está organizado em **12 Dailys 
 | Coleção | GET | `/colecao` | Lista exclusivamente as plantas descobertas pelo usuário logado |
 | Coleção | GET | `/colecao/{id}` | Mostra os detalhes da descoberta com foto e receitas |
 | Coleção | DELETE | `/colecao/{id}` | Remove uma planta da coleção pessoal |
+| Identificação | POST | `/identificacoes` | Identifica a espécie por IA, informa confiança (%) e aviso botânico |
 | Uploads | POST | `/upload-foto` | Envia foto JPG/PNG até 5MB e salva no servidor local com UUID |
 | Estáticos | GET | `/uploads/{foto}` | Servidor estático público de exibição das fotos salvas |
 
-As demais rotas planejadas (identificação por foto com IA) estão descritas no [FLUXO_DE_TRABALHO.md](FLUXO_DE_TRABALHO.md) e [notas.txt](notas.txt).
+Todas as 12 APIs REST especificadas no [FLUXO_DE_TRABALHO.md](FLUXO_DE_TRABALHO.md) e [notas.txt](notas.txt) estão implementadas e ativas.
 
 ## Estrutura do projeto
 

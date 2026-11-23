@@ -23,6 +23,7 @@ IA, execute o DIA [NÚMERO DO DIA] conforme o arquivo FLUXO_DE_TRABALHO.md
 4. Adicionará as dependências gratuitas correspondentes ao `requirements.txt`.
 5. Executará os comandos de validação e testes automatizados.
 6. Entregará um resumo do que foi construído e apontará onde você deve revisar.
+7. Entregará uma lista completa de todas as pastas e arquivos criados, modificados ou excluídos durante a execução.
 
 ### O seu papel como desenvolvedor/estudante:
 1. Revisar o código gerado.

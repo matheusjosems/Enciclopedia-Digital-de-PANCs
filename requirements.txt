@@ -8,3 +8,6 @@ pyjwt
 python-multipart
 httpx
 pillow
+numpy
+pytest
+pytest-asyncio
