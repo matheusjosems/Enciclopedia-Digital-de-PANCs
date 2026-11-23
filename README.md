@@ -4,6 +4,10 @@ Sistema web em que o usuário fotografa uma planta, uma IA a identifica e o sist
 
 Projeto final da disciplina de Desenvolvimento de Sistemas, do curso de Ciência da Computação do CEUB.
 
+## 🚀 Fluxo de Trabalho & Dailys (Execução Guiada por IA)
+
+O planejamento do desenvolvimento deste projeto está organizado em **12 Dailys sequenciais** documentadas no arquivo [FLUXO_DE_TRABALHO.md](FLUXO_DE_TRABALHO.md). Cada daily contém o objetivo do dia, materiais de referência da pasta, requisitos atendidos, ferramentas 100% gratuitas e o comando gatilho para a IA executar a tarefa diária.
+
 ## Tecnologias
 
 - Python
@@ -42,12 +46,24 @@ Projeto final da disciplina de Desenvolvimento de Sistemas, do curso de Ciência
 
 ## Rotas disponíveis
 
-| Método | Rota | Descrição |
-| --- | --- | --- |
-| GET | `/plantas` | Lista as plantas do catálogo |
-| GET | `/plantas/{id}` | Retorna os dados de uma planta |
+| Grupo | Método | Rota | Descrição |
+| --- | --- | --- | --- |
+| Autenticação | POST | `/auth/cadastro` | Cria uma conta com nome, e-mail e senha criptografada (bcrypt) |
+| Autenticação | POST | `/auth/login` | Valida credenciais e devolve token de acesso Bearer JWT |
+| Usuários | GET | `/usuarios/me` | Retorna o perfil do usuário logado e total de descobertas |
+| Plantas | GET | `/plantas` | Lista as plantas do catálogo com busca e filtros |
+| Plantas | GET | `/plantas/{id}` | Retorna os dados completos da planta |
+| Receitas | GET | `/plantas/{id}/receitas` | Lista as receitas culinárias feitas com a planta |
+| Receitas | GET | `/receitas/{id}` | Retorna uma receita com ingredientes e modo de preparo |
+| Receitas | GET | `/receitas` | Catálogo geral de todas as receitas culinárias |
+| Coleção | POST | `/colecao` | Salva uma planta na coleção pessoal com foto e data |
+| Coleção | GET | `/colecao` | Lista exclusivamente as plantas descobertas pelo usuário logado |
+| Coleção | GET | `/colecao/{id}` | Mostra os detalhes da descoberta com foto e receitas |
+| Coleção | DELETE | `/colecao/{id}` | Remove uma planta da coleção pessoal |
+| Uploads | POST | `/upload-foto` | Envia foto JPG/PNG até 5MB e salva no servidor local com UUID |
+| Estáticos | GET | `/uploads/{foto}` | Servidor estático público de exibição das fotos salvas |
 
-As demais rotas planejadas (cadastro e login, identificação por foto, coleção e receitas) estão descritas no documento de requisitos do projeto e serão implementadas nas próximas entregas.
+As demais rotas planejadas (identificação por foto com IA) estão descritas no [FLUXO_DE_TRABALHO.md](FLUXO_DE_TRABALHO.md) e [notas.txt](notas.txt).
 
 ## Estrutura do projeto
 

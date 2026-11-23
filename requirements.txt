@@ -1,2 +1,10 @@
-fastapi 
+fastapi
 uvicorn
+sqlalchemy
+requests
+beautifulsoup4
+bcrypt
+pyjwt
+python-multipart
+httpx
+pillow
