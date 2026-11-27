@@ -3,186 +3,157 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Identificar PANC com IA — Enciclopédia Digital de PANCs</title>
+  <title>Identificar uma Planta — Enciclopédia Digital de PANCs</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="/static/styles.css">
 </head>
-<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
+<body class="text-[#0F291E] flex flex-col min-h-screen">
 
   <div id="navbar-container"></div>
 
-  <main class="max-w-4xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full space-y-6">
-    <!-- Cabeçalho -->
-    <section class="bg-gradient-to-br from-emerald-800 via-emerald-700 to-teal-800 text-white rounded-3xl p-6 sm:p-8 shadow-md">
-      <span class="inline-block bg-emerald-900/60 text-emerald-200 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">
-        Visão Computacional & Botânica
-      </span>
-      <h1 class="text-2xl sm:text-4xl font-extrabold mt-2 tracking-tight">
-        Identificar Planta por Foto
-      </h1>
-      <p class="text-emerald-100 text-sm sm:text-base mt-2 max-w-2xl">
-        Fotografe uma planta com a câmera do celular ou envie uma imagem da galeria (JPG ou PNG até 5 MB) para identificar espécies PANC e consultar receitas.
-      </p>
-    </section>
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8 flex-1 w-full space-y-5">
+    <!-- Barra superior como na Tela 6 do PDF -->
+    <div class="flex flex-wrap items-center justify-between gap-2 text-xs sm:text-sm">
+      <a href="/minha-colecao" class="text-[#0A2918] hover:text-white font-semibold transition">
+        ← Cancelar e voltar
+      </a>
+      <span class="text-[#0A2918] font-medium">Identificação botânica por IA</span>
+    </div>
 
-    <!-- Card de Captura / Upload -->
-    <section id="card-captura" class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 sm:p-8 space-y-6">
-      <!-- Inputs ocultos -->
-      <input type="file" id="input-camera" accept="image/*" capture="environment" class="hidden">
-      <input type="file" id="input-galeria" accept="image/jpeg,image/png,.jpg,.jpeg,.png" class="hidden">
+    <h1 class="text-2xl sm:text-3xl font-bold text-white">Identificar uma planta</h1>
 
-      <!-- Botões de Ação -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <button
-          type="button"
-          id="btn-camera"
-          class="flex items-center justify-center space-x-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 px-6 rounded-2xl shadow-md transition text-base"
-        >
-          <span class="text-2xl">📷</span>
-          <span>Fotografar Planta</span>
-        </button>
+    <!-- Layout 2 Colunas da Tela 6 do PDF -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
-        <button
-          type="button"
-          id="btn-galeria"
-          class="flex items-center justify-center space-x-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold py-4 px-6 rounded-2xl border border-slate-300 transition text-base"
-        >
-          <span class="text-2xl">🖼️</span>
-          <span>Escolher da Galeria</span>
-        </button>
-      </div>
+      <!-- 1. Envie a foto -->
+      <section class="lg:col-span-6 panc-card p-6 space-y-4">
+        <h2 class="text-base sm:text-lg font-bold text-[#0F291E]">1. Envie a foto</h2>
 
-      <!-- Alerta de erro de validação/envio -->
-      <div id="alerta-erro" class="hidden bg-red-50 border border-red-200 text-red-700 rounded-2xl p-4 text-sm font-medium"></div>
+        <input type="file" id="input-camera" accept="image/*" capture="environment" class="hidden">
+        <input type="file" id="input-galeria" accept="image/jpeg,image/png,.jpg,.jpeg,.png" class="hidden">
 
-      <!-- Preview da Imagem Selecionada -->
-      <div id="container-preview" class="hidden space-y-4">
-        <div class="relative rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 max-h-96 flex items-center justify-center">
-          <img id="img-preview" src="" alt="Pré-visualização da planta" class="max-h-96 w-auto object-contain">
+        <!-- Caixa de preview -->
+        <div class="rounded-xl bg-[#D9DDE2] border border-slate-300 h-64 sm:h-72 flex flex-col items-center justify-center overflow-hidden relative">
+          <div id="placeholder-preview" class="text-center space-y-2 px-4 text-slate-600">
+            <span class="text-4xl block">📷</span>
+            <p class="text-xs sm:text-sm font-medium">Sua foto aparece aqui</p>
+          </div>
+          <img id="img-preview" src="" alt="Pré-visualização da planta" class="hidden w-full h-full object-contain bg-slate-900/5">
         </div>
-        <div class="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500">
-          <span id="info-arquivo" class="font-medium"></span>
-          <button type="button" id="btn-limpar-foto" class="text-red-600 hover:underline font-semibold">
-            Trocar foto
+
+        <p id="info-arquivo" class="hidden text-[11px] text-[#2B5440] font-medium"></p>
+
+        <!-- Botões principais da Tela 6 -->
+        <div class="flex flex-wrap gap-3">
+          <button type="button" id="btn-camera" class="btn-caramel py-2.5 px-4 text-xs sm:text-sm shadow-sm">
+            Tirar foto
+          </button>
+          <button type="button" id="btn-galeria" class="btn-outline-mint py-2.5 px-4 text-xs sm:text-sm">
+            Enviar da galeria
           </button>
         </div>
+
+        <p class="text-[11px] text-[#2B5440]">
+          Formatos aceitos: JPG ou PNG, com até 5 MB.
+        </p>
+
+        <div id="alerta-erro" class="hidden bg-red-50 border border-red-300 text-red-700 rounded-xl p-3 text-xs font-medium"></div>
 
         <button
           type="button"
           id="btn-identificar"
-          class="w-full bg-teal-700 hover:bg-teal-800 text-white font-bold py-3.5 px-6 rounded-2xl shadow-md transition flex items-center justify-center space-x-2 text-base"
+          class="hidden w-full bg-[#048A45] hover:bg-[#036934] text-white font-bold py-3 px-4 rounded-xl shadow transition text-sm"
         >
-          <span>🔍</span>
-          <span>Identificar Espécie com IA</span>
+          🔍 Identificar planta agora
         </button>
-      </div>
 
-      <!-- Loading Spinner -->
-      <div id="loading-ia" class="hidden flex flex-col items-center justify-center py-10 space-y-3">
-        <div class="animate-spin rounded-full h-12 w-12 border-4 border-emerald-600 border-t-transparent"></div>
-        <p class="text-sm font-semibold text-emerald-800">Analisando características botânicas com a IA...</p>
-        <p class="text-xs text-slate-500">Isso leva apenas alguns segundos.</p>
-      </div>
-    </section>
-
-    <!-- Card de Resultado da IA -->
-    <section id="card-resultado" class="hidden space-y-6">
-      <!-- Aviso Obrigatório de Segurança Alimentar (RF14) -->
-      <div id="alerta-rf14" class="bg-amber-50 border-2 border-amber-400 rounded-3xl p-5 shadow-sm flex items-start space-x-3">
-        <span class="text-2xl leading-none">⚠️</span>
-        <div>
-          <h2 class="text-sm sm:text-base font-extrabold text-amber-900 uppercase tracking-wide">
-            Aviso Importante de Segurança Botânica
-          </h2>
-          <p id="texto-aviso-seguranca" class="text-amber-900 text-xs sm:text-sm mt-1 leading-relaxed font-medium"></p>
+        <!-- Loading -->
+        <div id="loading-ia" class="hidden flex items-center justify-center space-x-3 py-3 text-xs font-bold text-[#048A45]">
+          <div class="animate-spin rounded-full h-5 w-5 border-2 border-[#048A45] border-t-transparent"></div>
+          <span>Processando imagem com a IA...</span>
         </div>
-      </div>
+      </section>
 
-      <!-- Aviso de Baixa Confiança (RNF07) -->
-      <div id="alerta-rnf07" class="hidden bg-red-50 border border-red-300 rounded-2xl p-4 flex items-start space-x-3">
-        <span class="text-xl leading-none">📸</span>
-        <div>
-          <h3 class="text-sm font-bold text-red-900">Baixa Confiança na Identificação</h3>
-          <p id="texto-aviso-confianca" class="text-xs sm:text-sm text-red-800 mt-0.5"></p>
+      <!-- 2. Resultado da identificação -->
+      <section class="lg:col-span-6 panc-card p-6 space-y-4">
+        <h2 class="text-base sm:text-lg font-bold text-[#0F291E]">2. Resultado da identificação</h2>
+
+        <!-- Estado inicial antes de enviar foto -->
+        <div id="estado-aguardando" class="bg-white/70 border border-emerald-200 rounded-xl p-6 text-center space-y-2 text-xs sm:text-sm text-[#2B5440]">
+          <span class="text-3xl block">🌿</span>
+          <p class="font-semibold text-[#0F291E]">Aguardando sua foto</p>
+          <p>Envie uma imagem ao lado e clique em <strong>Identificar planta agora</strong> para ver a espécie provável, confiança e receitas.</p>
         </div>
-      </div>
 
-      <!-- Card Principal da Espécie Identificada -->
-      <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden p-6 sm:p-8 space-y-6">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-          <div class="relative h-64 sm:h-72 rounded-2xl overflow-hidden bg-slate-100 border border-slate-200">
-            <img id="res-foto" src="" alt="Foto enviada" class="w-full h-full object-cover">
-            <span id="badge-confianca" class="absolute top-3 right-3 text-xs font-extrabold px-3 py-1.5 rounded-full shadow-md">
-              0% de confiança
-            </span>
-          </div>
-
-          <div class="space-y-4">
+        <!-- Resultado preenchido após POST /identificacoes -->
+        <div id="card-resultado" class="hidden space-y-4">
+          <div class="bg-white border border-emerald-200 rounded-xl p-5 space-y-3">
             <div>
-              <span id="res-familia" class="text-xs font-bold uppercase tracking-wider text-emerald-700">Família</span>
-              <h2 id="res-nome-popular" class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Nome Popular</h2>
-              <p id="res-nome-cientifico" class="text-sm sm:text-base italic text-slate-500 font-medium">Nome Científico</p>
+              <h3 id="res-nome-popular" class="text-2xl font-bold text-[#0F291E]">Nome Popular</h3>
+              <p id="res-nome-cientifico" class="text-xs sm:text-sm italic text-[#2B5440]">Nome Científico</p>
             </div>
 
-            <p id="res-descricao" class="text-sm text-slate-600 leading-relaxed"></p>
-
-            <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-3.5 text-xs sm:text-sm">
-              <strong class="text-emerald-900">🥗 Partes comestíveis:</strong>
-              <span id="res-partes" class="text-emerald-800"></span>
+            <div class="space-y-1.5">
+              <div class="flex items-center justify-between text-xs font-bold text-[#0F291E]">
+                <span>Precisão da identificação pela IA</span>
+                <span id="badge-confianca" class="text-base">0%</span>
+              </div>
+              <div class="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden">
+                <div id="barra-confianca" class="h-full bg-[#048A45] rounded-full transition-all duration-500" style="width: 0%;"></div>
+              </div>
             </div>
+          </div>
 
-            <div class="bg-slate-100 rounded-2xl p-3.5 text-xs sm:text-sm">
-              <strong class="text-slate-800">🛡️ Cuidados no preparo:</strong>
-              <span id="res-cuidados" class="text-slate-700"></span>
+          <!-- Aviso obrigatório RF14 -->
+          <div class="bg-[#FDF3DC] border border-[#B85A00] rounded-xl p-4 text-xs text-[#4A2500] leading-relaxed">
+            <p id="texto-aviso-seguranca"></p>
+          </div>
+
+          <!-- Alerta de Baixa Confiança (RNF07) -->
+          <div id="alerta-rnf07" class="hidden bg-red-50 border border-red-300 rounded-xl p-3 text-xs text-red-800 font-medium">
+            <p id="texto-aviso-confianca"></p>
+          </div>
+
+          <!-- Botões de Ação da Tela 6 -->
+          <div class="flex flex-wrap gap-3">
+            <button
+              type="button"
+              id="btn-salvar-colecao"
+              class="btn-caramel flex-1 py-3 px-4 text-xs sm:text-sm shadow-sm"
+            >
+              Salvar na enciclopédia
+            </button>
+            <button
+              type="button"
+              id="btn-nova-foto"
+              class="btn-outline-mint py-3 px-4 text-xs sm:text-sm"
+            >
+              Tentar outra foto
+            </button>
+          </div>
+          <p id="msg-salvar-colecao" class="text-xs font-semibold text-center"></p>
+
+          <!-- Detalhes resumidos + link para ficha completa -->
+          <div class="bg-white/80 border border-emerald-200 rounded-xl p-4 space-y-2 text-xs text-[#1B3A2C]">
+            <p><strong>Partes comestíveis:</strong> <span id="res-partes"></span></p>
+            <p><strong>Cuidados:</strong> <span id="res-cuidados"></span></p>
+            <div id="secao-receitas" class="hidden pt-2 border-t border-emerald-100">
+              <strong class="text-[#0F291E]">Receitas sugeridas:</strong>
+              <ul id="res-receitas" class="list-disc list-inside mt-1 space-y-0.5"></ul>
+            </div>
+            <div class="pt-1">
+              <a id="link-ver-ficha" href="/" class="font-bold text-[#048A45] underline">
+                Abrir ficha completa da planta →
+              </a>
             </div>
           </div>
         </div>
+      </section>
 
-        <!-- Botões de Ação após identificação -->
-        <div class="pt-4 border-t border-slate-100 flex flex-col sm:flex-row gap-3">
-          <button
-            type="button"
-            id="btn-salvar-colecao"
-            class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-5 rounded-xl shadow-md transition flex items-center justify-center space-x-2 text-sm sm:text-base"
-          >
-            <span>⭐</span>
-            <span>Salvar na Minha Coleção</span>
-          </button>
-
-          <a
-            id="link-ver-ficha"
-            href="/"
-            class="sm:w-auto text-center bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-semibold py-3.5 px-5 rounded-xl border border-emerald-200 transition text-sm sm:text-base"
-          >
-            Ver Ficha Completa
-          </a>
-
-          <button
-            type="button"
-            id="btn-nova-foto"
-            class="sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-3.5 px-5 rounded-xl transition text-sm sm:text-base"
-          >
-            📸 Nova Foto
-          </button>
-        </div>
-        <p id="msg-salvar-colecao" class="text-xs sm:text-sm text-center font-medium"></p>
-
-        <!-- Receitas sugeridas -->
-        <div id="secao-receitas" class="hidden pt-4 border-t border-slate-100 space-y-3">
-          <h3 class="text-base font-bold text-slate-800">🍳 Receitas Sugeridas com esta PANC</h3>
-          <div id="res-receitas" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
-        </div>
-
-        <!-- Outras possibilidades -->
-        <div id="secao-alternativas" class="hidden pt-4 border-t border-slate-100 space-y-2">
-          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">Outras espécies semelhantes</h3>
-          <div id="res-alternativas" class="flex flex-wrap gap-2"></div>
-        </div>
-      </div>
-    </section>
+    </div>
   </main>
 
-  <footer class="bg-slate-900 text-slate-400 py-6 text-center text-xs border-t border-slate-800">
+  <footer class="bg-[#036934] text-emerald-100 py-5 text-center text-xs border-t border-emerald-300/20">
     <p>🌿 <strong>Enciclopédia Digital de PANCs</strong> — Ciência da Computação (CEUB)</p>
   </footer>
 
@@ -194,11 +165,13 @@
 
     const inputCamera = document.getElementById("input-camera");
     const inputGaleria = document.getElementById("input-galeria");
-    const containerPreview = document.getElementById("container-preview");
+    const placeholderPreview = document.getElementById("placeholder-preview");
     const imgPreview = document.getElementById("img-preview");
     const infoArquivo = document.getElementById("info-arquivo");
     const alertaErro = document.getElementById("alerta-erro");
+    const btnIdentificar = document.getElementById("btn-identificar");
     const loadingIa = document.getElementById("loading-ia");
+    const estadoAguardando = document.getElementById("estado-aguardando");
     const cardResultado = document.getElementById("card-resultado");
 
     function mostrarErro(msg) {
@@ -217,7 +190,7 @@
 
       const extensao = (file.name.split(".").pop() || "").toLowerCase();
       if (!["jpg", "jpeg", "png"].includes(extensao)) {
-        mostrarErro("Formato inválido. Envie apenas imagens JPG, JPEG ou PNG (RNF08).");
+        mostrarErro("Formato inválido. Envie apenas imagens JPG ou PNG (RNF08).");
         return;
       }
 
@@ -231,35 +204,37 @@
       const reader = new FileReader();
       reader.onload = (e) => {
         imgPreview.src = e.target.result;
+        imgPreview.classList.remove("hidden");
+        placeholderPreview.classList.add("hidden");
         infoArquivo.textContent = `${file.name} (${(file.size / 1024).toFixed(0)} KB)`;
-        containerPreview.classList.remove("hidden");
-        cardResultado.classList.add("hidden");
+        infoArquivo.classList.remove("hidden");
+        btnIdentificar.classList.remove("hidden");
       };
       reader.readAsDataURL(file);
     }
 
     document.getElementById("btn-camera").addEventListener("click", () => inputCamera.click());
     document.getElementById("btn-galeria").addEventListener("click", () => inputGaleria.click());
-
     inputCamera.addEventListener("change", (e) => validarESelecionarArquivo(e.target.files[0]));
     inputGaleria.addEventListener("change", (e) => validarESelecionarArquivo(e.target.files[0]));
 
-    function resetarSelecao() {
+    function resetarFluxo() {
       arquivoSelecionado = null;
+      ultimoResultadoIA = null;
       inputCamera.value = "";
       inputGaleria.value = "";
-      containerPreview.classList.add("hidden");
+      imgPreview.classList.add("hidden");
+      placeholderPreview.classList.remove("hidden");
+      infoArquivo.classList.add("hidden");
+      btnIdentificar.classList.add("hidden");
       cardResultado.classList.add("hidden");
+      estadoAguardando.classList.remove("hidden");
       limparErro();
     }
 
-    document.getElementById("btn-limpar-foto").addEventListener("click", resetarSelecao);
-    document.getElementById("btn-nova-foto").addEventListener("click", () => {
-      resetarSelecao();
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
+    document.getElementById("btn-nova-foto").addEventListener("click", resetarFluxo);
 
-    document.getElementById("btn-identificar").addEventListener("click", async () => {
+    btnIdentificar.addEventListener("click", async () => {
       if (!arquivoSelecionado) {
         mostrarErro("Selecione ou fotografe uma planta antes de enviar.");
         return;
@@ -267,7 +242,7 @@
 
       limparErro();
       loadingIa.classList.remove("hidden");
-      document.getElementById("btn-identificar").disabled = true;
+      btnIdentificar.disabled = true;
 
       try {
         const formData = new FormData();
@@ -277,11 +252,8 @@
           method: "POST",
           body: formData
         });
-
         const dados = await res.json();
-        if (!res.ok) {
-          throw new Error(dados.detail || "Não foi possível identificar a foto. Tente outra imagem.");
-        }
+        if (!res.ok) throw new Error(dados.detail || "Não foi possível processar a imagem.");
 
         ultimoResultadoIA = dados;
         exibirResultadoIA(dados);
@@ -289,83 +261,58 @@
         mostrarErro(err.message);
       } finally {
         loadingIa.classList.add("hidden");
-        document.getElementById("btn-identificar").disabled = false;
+        btnIdentificar.disabled = false;
       }
     });
 
     function exibirResultadoIA(dados) {
+      estadoAguardando.classList.add("hidden");
+      cardResultado.classList.remove("hidden");
+
+      document.getElementById("res-nome-popular").textContent = dados.nome_popular;
+      document.getElementById("res-nome-cientifico").textContent = dados.nome_cientifico;
+      document.getElementById("badge-confianca").textContent = `${dados.confianca}%`;
+
+      const barra = document.getElementById("barra-confianca");
+      barra.style.width = `${Math.min(100, Math.max(0, dados.confianca))}%`;
+      barra.className = dados.baixa_confianca
+        ? "h-full bg-[#B85A00] rounded-full transition-all duration-500"
+        : "h-full bg-[#048A45] rounded-full transition-all duration-500";
+
       document.getElementById("texto-aviso-seguranca").textContent = dados.aviso_seguranca;
 
       const alertaRnf07 = document.getElementById("alerta-rnf07");
       if (dados.baixa_confianca) {
         document.getElementById("texto-aviso-confianca").textContent =
-          dados.aviso_confianca || "Confiança baixa. Envie outra foto mais nítida das folhas.";
+          dados.aviso_confianca || "Confiança baixa na identificação. Tente enviar outra foto mais nítida.";
         alertaRnf07.classList.remove("hidden");
       } else {
         alertaRnf07.classList.add("hidden");
       }
 
-      document.getElementById("res-foto").src = dados.foto_enviada_url;
-      const badge = document.getElementById("badge-confianca");
-      badge.textContent = `${dados.confianca}% de confiança`;
-      badge.className = dados.baixa_confianca
-        ? "absolute top-3 right-3 bg-amber-500 text-white text-xs font-extrabold px-3 py-1.5 rounded-full shadow-md"
-        : "absolute top-3 right-3 bg-emerald-600 text-white text-xs font-extrabold px-3 py-1.5 rounded-full shadow-md";
-
-      document.getElementById("res-familia").textContent = dados.familia || "PANC Catalogada";
-      document.getElementById("res-nome-popular").textContent = dados.nome_popular;
-      document.getElementById("res-nome-cientifico").textContent = dados.nome_cientifico;
-      document.getElementById("res-descricao").textContent = dados.descricao || "Descrição botânica disponível na ficha.";
-      document.getElementById("res-partes").textContent = dados.partes_comestiveis || "Consulte a ficha completa.";
-      document.getElementById("res-cuidados").textContent = dados.cuidados || "Confirmar características antes do consumo.";
+      document.getElementById("res-partes").textContent = dados.partes_comestiveis || "Consulte a ficha.";
+      document.getElementById("res-cuidados").textContent = dados.cuidados || "Confirmar espécie antes do consumo.";
       document.getElementById("link-ver-ficha").href = `/planta/${encodeURIComponent(dados.id_planta)}`;
 
-      // Botão salvar
-      const btnSalvar = document.getElementById("btn-salvar-colecao");
-      const msgSalvar = document.getElementById("msg-salvar-colecao");
-      btnSalvar.disabled = false;
-      btnSalvar.innerHTML = "<span>⭐</span><span>Salvar na Minha Coleção</span>";
-      btnSalvar.className = "flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-5 rounded-xl shadow-md transition flex items-center justify-center space-x-2 text-sm sm:text-base";
-      msgSalvar.textContent = "";
-
-      // Receitas sugeridas
       const secRec = document.getElementById("secao-receitas");
-      const gridRec = document.getElementById("res-receitas");
-      gridRec.innerHTML = "";
+      const ulRec = document.getElementById("res-receitas");
+      ulRec.innerHTML = "";
       if (dados.receitas_sugeridas && dados.receitas_sugeridas.length > 0) {
         secRec.classList.remove("hidden");
         dados.receitas_sugeridas.forEach(r => {
-          const item = document.createElement("div");
-          item.className = "bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-1";
-          item.innerHTML = `
-            <h4 class="font-bold text-sm text-emerald-900">${escapeHtml(r.titulo)}</h4>
-            <p class="text-xs text-slate-600 line-clamp-2">${escapeHtml(r.ingredientes)}</p>
-          `;
-          gridRec.appendChild(item);
+          const li = document.createElement("li");
+          li.textContent = r.titulo;
+          ulRec.appendChild(li);
         });
       } else {
         secRec.classList.add("hidden");
       }
 
-      // Outras possibilidades
-      const secAlt = document.getElementById("secao-alternativas");
-      const divAlt = document.getElementById("res-alternativas");
-      divAlt.innerHTML = "";
-      if (dados.outras_possibilidades && dados.outras_possibilidades.length > 0) {
-        secAlt.classList.remove("hidden");
-        dados.outras_possibilidades.forEach(alt => {
-          const pill = document.createElement("a");
-          pill.href = `/planta/${encodeURIComponent(alt.id_planta)}`;
-          pill.className = "bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-emerald-800 text-xs font-medium px-3 py-1.5 rounded-full border border-slate-200 transition";
-          pill.textContent = `${alt.nome_popular} (${alt.confianca}%)`;
-          divAlt.appendChild(pill);
-        });
-      } else {
-        secAlt.classList.add("hidden");
-      }
-
-      cardResultado.classList.remove("hidden");
-      cardResultado.scrollIntoView({ behavior: "smooth", block: "start" });
+      const btnSalvar = document.getElementById("btn-salvar-colecao");
+      const msgSalvar = document.getElementById("msg-salvar-colecao");
+      btnSalvar.disabled = false;
+      btnSalvar.textContent = "Salvar na enciclopédia";
+      msgSalvar.textContent = "";
     }
 
     document.getElementById("btn-salvar-colecao").addEventListener("click", async () => {
@@ -374,8 +321,8 @@
       const msgSalvar = document.getElementById("msg-salvar-colecao");
 
       if (!getToken()) {
-        msgSalvar.className = "text-xs sm:text-sm text-center font-medium text-amber-700";
-        msgSalvar.innerHTML = "Faça <a href='/login' class='underline font-bold'>login ou cadastre-se</a> para salvar esta planta na sua coleção.";
+        msgSalvar.className = "text-xs font-semibold text-center text-[#964800]";
+        msgSalvar.innerHTML = "Faça <a href='/login' class='underline font-bold'>login ou crie uma conta</a> para salvar na sua enciclopédia.";
         return;
       }
 
@@ -389,25 +336,22 @@
             foto_usuario: ultimoResultadoIA.foto_enviada_url
           })
         });
-
         const dados = await res.json();
         if (res.ok) {
-          btnSalvar.innerHTML = "<span>✅</span><span>Salva na Minha Coleção</span>";
-          btnSalvar.classList.remove("bg-emerald-600", "hover:bg-emerald-700");
-          btnSalvar.classList.add("bg-emerald-800");
-          msgSalvar.className = "text-xs sm:text-sm text-center font-medium text-emerald-700";
-          msgSalvar.innerHTML = "Descoberta registrada! <a href='/minha-colecao' class='underline font-bold'>Abrir Minha Coleção →</a>";
+          btnSalvar.textContent = "✅ Salva na enciclopédia";
+          msgSalvar.className = "text-xs font-semibold text-center text-[#048A45]";
+          msgSalvar.innerHTML = "Descoberta adicionada! <a href='/minha-colecao' class='underline font-bold'>Ver Minha Enciclopédia →</a>";
         } else {
-          msgSalvar.className = "text-xs sm:text-sm text-center font-medium text-red-600";
-          msgSalvar.textContent = dados.detail || "Não foi possível salvar na coleção.";
+          msgSalvar.className = "text-xs font-semibold text-center text-red-700";
+          msgSalvar.textContent = dados.detail || "Não foi possível salvar.";
           btnSalvar.disabled = false;
-          btnSalvar.innerHTML = "<span>⭐</span><span>Salvar na Minha Coleção</span>";
+          btnSalvar.textContent = "Salvar na enciclopédia";
         }
       } catch (err) {
-        msgSalvar.className = "text-xs sm:text-sm text-center font-medium text-red-600";
-        msgSalvar.textContent = "Erro de conexão ao salvar descoberta.";
+        msgSalvar.className = "text-xs font-semibold text-center text-red-700";
+        msgSalvar.textContent = "Erro de conexão.";
         btnSalvar.disabled = false;
-        btnSalvar.innerHTML = "<span>⭐</span><span>Salvar na Minha Coleção</span>";
+        btnSalvar.textContent = "Salvar na enciclopédia";
       }
     });
   </script>

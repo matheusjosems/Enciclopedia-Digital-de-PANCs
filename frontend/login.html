@@ -3,160 +3,197 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Acesso — Enciclopédia de PANCs</title>
+  <title>Entrar — Enciclopédia Digital de PANCs</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="/static/styles.css">
 </head>
-<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
+<body class="text-[#0F291E] flex flex-col min-h-screen">
 
-  <div id="navbar-container"></div>
+  <!-- Barra superior minimalista como nas Telas 2 e 3 do PDF -->
+  <header class="max-w-5xl mx-auto w-full px-4 sm:px-6 pt-6 flex items-center justify-between text-xs sm:text-sm">
+    <a id="link-voltar" href="/" class="text-[#0A2918] hover:text-white font-semibold transition">
+      ← Voltar ao início
+    </a>
+    <a href="/#biblioteca" class="text-emerald-100 hover:text-white font-medium transition">
+      Ver biblioteca
+    </a>
+  </header>
 
-  <main class="flex-1 flex items-center justify-center px-4 py-12">
-    <div class="max-w-md w-full bg-white rounded-3xl shadow-xl border border-slate-200/80 overflow-hidden">
-      
-      <!-- Cabeçalho do Card -->
-      <div class="bg-gradient-to-r from-emerald-800 to-teal-800 p-6 text-center text-white">
-        <span class="text-4xl">🌿</span>
-        <h2 class="text-2xl font-extrabold mt-2 tracking-tight">Enciclopédia de PANCs</h2>
-        <p class="text-emerald-100 text-xs mt-1">Identificação botânica e diário de descobertas</p>
+  <main class="flex-1 flex items-center justify-center px-4 py-8">
+    <div class="max-w-md w-full panc-card p-7 sm:p-9 space-y-5">
+
+      <!-- Cabeçalho dinâmico (Tela 2: Entrar / Tela 3: Criar sua enciclopédia) -->
+      <div class="space-y-2">
+        <h1 id="titulo-auth" class="text-2xl font-bold text-[#0F291E] leading-snug">
+          Entrar na sua enciclopédia
+        </h1>
+        <p id="subtitulo-auth" class="hidden text-xs text-[#2B5440] leading-relaxed">
+          Escolha um nome de usuário (ele é único) e uma senha. Sua enciclopédia começa vazia e vai enchendo a cada planta que você descobrir.
+        </p>
       </div>
 
-      <!-- Alternador de Abas (Login / Cadastro) -->
-      <div class="flex border-b border-slate-200 text-sm font-semibold">
-        <button id="tab-login" class="flex-1 py-3 text-center text-emerald-700 border-b-2 border-emerald-600 bg-white transition">
-          Entrar (Login)
-        </button>
-        <button id="tab-cadastro" class="flex-1 py-3 text-center text-slate-400 border-b-2 border-transparent bg-slate-50 hover:text-slate-700 transition">
-          Criar Nova Conta
-        </button>
-      </div>
+      <!-- Alerta -->
+      <div id="alerta" class="hidden p-3 rounded-xl text-xs font-medium"></div>
 
-      <div class="p-6 sm:p-8">
-        <!-- Alerta de Notificação -->
-        <div id="alerta" class="hidden mb-4 p-3 rounded-xl text-xs sm:text-sm font-medium"></div>
-
-        <!-- Formulário de LOGIN -->
-        <form id="form-login" class="space-y-4">
-          <div>
-            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">E-mail</label>
-            <input 
-              type="email" 
-              id="login-email" 
-              required
-              placeholder="seu.email@exemplo.com"
-              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
-            >
-          </div>
-
-          <div>
-            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Senha</label>
-            <input 
-              type="password" 
-              id="login-senha" 
-              required
-              placeholder="••••••••"
-              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
-            >
-          </div>
-
-          <button 
-            type="submit" 
-            id="btn-login-submit"
-            class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl shadow-md transition duration-200 text-sm"
+      <!-- Tela 2: Formulário de LOGIN -->
+      <form id="form-login" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-[#0F291E] mb-1.5">usuário ou e-mail</label>
+          <input
+            type="text"
+            id="login-email"
+            required
+            placeholder="seu usuário ou e-mail"
+            class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#048A45] transition"
           >
-            Acessar Sistema
-          </button>
-        </form>
+        </div>
 
-        <!-- Formulário de CADASTRO (RF01) -->
-        <form id="form-cadastro" class="hidden space-y-4">
-          <div>
-            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Nome Completo</label>
-            <input 
-              type="text" 
-              id="cad-nome" 
-              required
-              placeholder="Seu Nome"
-              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
-            >
-          </div>
-
-          <div>
-            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">E-mail</label>
-            <input 
-              type="email" 
-              id="cad-email" 
-              required
-              placeholder="seu.email@exemplo.com"
-              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
-            >
-          </div>
-
-          <div>
-            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Senha (Mínimo 6 caracteres)</label>
-            <input 
-              type="password" 
-              id="cad-senha" 
-              required
-              minlength="6"
-              placeholder="••••••••"
-              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
-            >
-          </div>
-
-          <button 
-            type="submit" 
-            id="btn-cad-submit"
-            class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl shadow-md transition duration-200 text-sm"
+        <div>
+          <label class="block text-xs font-bold text-[#0F291E] mb-1.5">senha</label>
+          <input
+            type="password"
+            id="login-senha"
+            required
+            placeholder="sua senha"
+            class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#048A45] transition"
           >
-            Cadastrar Conta
-          </button>
-        </form>
+        </div>
 
-      </div>
+        <button
+          type="submit"
+          id="btn-login-submit"
+          class="btn-caramel w-full py-3 px-4 text-sm shadow-sm"
+        >
+          Entrar
+        </button>
+
+        <p class="text-center text-xs text-[#1B3A2C] pt-1">
+          Ainda não tem conta?
+          <button type="button" id="ir-para-cadastro" class="font-bold text-[#B85A00] underline">
+            Criar uma conta
+          </button>
+        </p>
+      </form>
+
+      <!-- Tela 3: Formulário de CADASTRO -->
+      <form id="form-cadastro" class="hidden space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-[#0F291E] mb-1.5">usuário</label>
+          <input
+            type="text"
+            id="cad-nome"
+            required
+            placeholder="escolha um nome de usuário"
+            class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#048A45] transition"
+          >
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-[#0F291E] mb-1.5">e-mail</label>
+          <input
+            type="email"
+            id="cad-email"
+            required
+            placeholder="seu.email@exemplo.com"
+            class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#048A45] transition"
+          >
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-[#0F291E] mb-1.5">senha</label>
+          <input
+            type="password"
+            id="cad-senha"
+            required
+            minlength="6"
+            placeholder="crie uma senha (mín. 6 caracteres)"
+            class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#048A45] transition"
+          >
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-[#0F291E] mb-1.5">confirmar senha</label>
+          <input
+            type="password"
+            id="cad-confirmar-senha"
+            required
+            minlength="6"
+            placeholder="repita a senha"
+            class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#048A45] transition"
+          >
+        </div>
+
+        <button
+          type="submit"
+          id="btn-cad-submit"
+          class="btn-caramel w-full py-3 px-4 text-sm shadow-sm"
+        >
+          Criar conta
+        </button>
+
+        <p class="text-center text-xs text-[#1B3A2C] pt-1">
+          Já tem conta?
+          <button type="button" id="ir-para-login" class="font-bold text-[#B85A00] underline">
+            Entrar
+          </button>
+        </p>
+      </form>
+
     </div>
   </main>
 
-  <footer class="bg-slate-900 text-slate-400 py-4 text-center text-xs">
-    <p>🌿 Enciclopédia Digital de PANCs — Ciência da Computação (CEUB)</p>
-  </footer>
-
   <script src="/static/app.js"></script>
   <script>
-    const tabLogin = document.getElementById("tab-login");
-    const tabCadastro = document.getElementById("tab-cadastro");
     const formLogin = document.getElementById("form-login");
     const formCadastro = document.getElementById("form-cadastro");
+    const tituloAuth = document.getElementById("titulo-auth");
+    const subtituloAuth = document.getElementById("subtitulo-auth");
+    const linkVoltar = document.getElementById("link-voltar");
     const alerta = document.getElementById("alerta");
 
     function mostrarAlerta(msg, sucesso = false) {
-      alerta.classList.remove("hidden", "bg-red-50", "text-red-700", "border-red-200", "bg-emerald-50", "text-emerald-700", "border-emerald-200");
+      alerta.classList.remove("hidden", "bg-red-50", "text-red-700", "border-red-300", "bg-emerald-100", "text-emerald-900", "border-emerald-400");
       if (sucesso) {
-        alerta.classList.add("bg-emerald-50", "text-emerald-700", "border", "border-emerald-200");
+        alerta.classList.add("bg-emerald-100", "text-emerald-900", "border", "border-emerald-400");
       } else {
-        alerta.classList.add("bg-red-50", "text-red-700", "border", "border-red-200");
+        alerta.classList.add("bg-red-50", "text-red-700", "border", "border-red-300");
       }
       alerta.textContent = msg;
     }
 
-    // Alternador de Abas
-    tabLogin.addEventListener("click", () => {
-      tabLogin.className = "flex-1 py-3 text-center text-emerald-700 border-b-2 border-emerald-600 bg-white transition font-semibold";
-      tabCadastro.className = "flex-1 py-3 text-center text-slate-400 border-b-2 border-transparent bg-slate-50 hover:text-slate-700 transition font-semibold";
+    function ativarModoLogin() {
+      tituloAuth.textContent = "Entrar na sua enciclopédia";
+      subtituloAuth.classList.add("hidden");
       formLogin.classList.remove("hidden");
       formCadastro.classList.add("hidden");
+      linkVoltar.href = "/";
+      linkVoltar.textContent = "← Voltar ao início";
       alerta.classList.add("hidden");
-    });
+    }
 
-    tabCadastro.addEventListener("click", () => {
-      tabCadastro.className = "flex-1 py-3 text-center text-emerald-700 border-b-2 border-emerald-600 bg-white transition font-semibold";
-      tabLogin.className = "flex-1 py-3 text-center text-slate-400 border-b-2 border-transparent bg-slate-50 hover:text-slate-700 transition font-semibold";
+    function ativarModoCadastro() {
+      tituloAuth.textContent = "Criar sua enciclopédia";
+      subtituloAuth.classList.remove("hidden");
       formCadastro.classList.remove("hidden");
       formLogin.classList.add("hidden");
+      linkVoltar.href = "/login";
+      linkVoltar.textContent = "← Voltar para entrar";
       alerta.classList.add("hidden");
+    }
+
+    document.getElementById("ir-para-cadastro").addEventListener("click", ativarModoCadastro);
+    document.getElementById("ir-para-login").addEventListener("click", (e) => {
+      e.preventDefault();
+      ativarModoLogin();
     });
 
-    // Submissão do LOGIN (RF02)
+    // Abre direto na tela 3 se vier de ?modo=cadastro
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("modo") === "cadastro") {
+      ativarModoCadastro();
+    }
+
+    // Submissão do LOGIN
     formLogin.addEventListener("submit", async (e) => {
       e.preventDefault();
       const email = document.getElementById("login-email").value.trim();
@@ -165,49 +202,44 @@
 
       try {
         btn.disabled = true;
-        btn.textContent = "Autenticando...";
+        btn.textContent = "Entrando...";
         alerta.classList.add("hidden");
 
         const res = await apiFetch("/auth/login", {
           method: "POST",
           body: JSON.stringify({ email, senha })
         });
-
         const dados = await res.json();
-        if (!res.ok) {
-          throw new Error(dados.detail || "E-mail ou senha incorretos.");
-        }
+        if (!res.ok) throw new Error(dados.detail || "Usuário ou senha incorretos.");
 
-        // Salva token JWT no localStorage
+        // Persiste token JWT (pancs_token) no localStorage via setToken()
         setToken(dados.access_token);
-
-        // Busca dados do perfil
         const resUser = await apiFetch("/usuarios/me");
-        if (resUser.ok) {
-          const user = await resUser.json();
-          setUsuarioLogado(user);
-        }
+        if (resUser.ok) setUsuarioLogado(await resUser.json());
 
-        mostrarAlerta("Login realizado com sucesso! Redirecionando...", true);
-        setTimeout(() => {
-          window.location.href = "/";
-        }, 1000);
-
+        mostrarAlerta("Login realizado! Abrindo sua enciclopédia...", true);
+        setTimeout(() => { window.location.href = "/minha-colecao"; }, 700);
       } catch (err) {
         mostrarAlerta(err.message, false);
       } finally {
         btn.disabled = false;
-        btn.textContent = "Acessar Sistema";
+        btn.textContent = "Entrar";
       }
     });
 
-    // Submissão do CADASTRO (RF01)
+    // Submissão do CADASTRO
     formCadastro.addEventListener("submit", async (e) => {
       e.preventDefault();
       const nome = document.getElementById("cad-nome").value.trim();
       const email = document.getElementById("cad-email").value.trim();
       const senha = document.getElementById("cad-senha").value;
+      const confirmar = document.getElementById("cad-confirmar-senha").value;
       const btn = document.getElementById("btn-cad-submit");
+
+      if (senha !== confirmar) {
+        mostrarAlerta("As senhas não coincidem. Confira e tente novamente.", false);
+        return;
+      }
 
       try {
         btn.disabled = true;
@@ -218,15 +250,11 @@
           method: "POST",
           body: JSON.stringify({ nome, email, senha })
         });
-
         const dados = await res.json();
-        if (!res.ok) {
-          throw new Error(dados.detail || "Erro ao criar conta.");
-        }
+        if (!res.ok) throw new Error(dados.detail || "Erro ao criar conta.");
 
-        mostrarAlerta("Conta criada com sucesso! Realizando login automático...", true);
+        mostrarAlerta("Enciclopédia criada! Entrando automaticamente...", true);
 
-        // Auto login
         const resLogin = await apiFetch("/auth/login", {
           method: "POST",
           body: JSON.stringify({ email, senha })
@@ -235,19 +263,16 @@
           const dadosLogin = await resLogin.json();
           setToken(dadosLogin.access_token);
           setUsuarioLogado(dados);
-          setTimeout(() => {
-            window.location.href = "/";
-          }, 1200);
+          setTimeout(() => { window.location.href = "/minha-colecao"; }, 800);
         } else {
-          tabLogin.click();
-          mostrarAlerta("Conta criada com sucesso! Faça login com suas credenciais.", true);
+          ativarModoLogin();
+          mostrarAlerta("Conta criada com sucesso! Faça login para entrar.", true);
         }
-
       } catch (err) {
         mostrarAlerta(err.message, false);
       } finally {
         btn.disabled = false;
-        btn.textContent = "Cadastrar Conta";
+        btn.textContent = "Criar conta";
       }
     });
   </script>

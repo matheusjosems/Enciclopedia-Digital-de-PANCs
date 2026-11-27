@@ -49,6 +49,7 @@ def test_detalhar_planta_sucesso(client):
     assert p["partes_comestiveis"]
     assert p["cuidados"]
     assert "regioes" in p
+    assert "sazonalidades" in p
 
 
 def test_detalhar_planta_inexistente_404(client):

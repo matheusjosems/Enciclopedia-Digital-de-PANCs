@@ -8,8 +8,12 @@ def test_pagina_catalogo_home(client):
     resp = client.get("/")
     assert resp.status_code == 200
     assert "text/html" in resp.headers["content-type"]
+    assert "Professor Tamanduá" in resp.text
     assert "input-busca" in resp.text
     assert "grid-plantas" in resp.text
+
+    resp_img = client.get("/static/assets/professor-tamandua.jfif")
+    assert resp_img.status_code == 200
 
 
 def test_pagina_login_cadastro(client):
@@ -18,6 +22,7 @@ def test_pagina_login_cadastro(client):
     assert "text/html" in resp.headers["content-type"]
     assert "form-login" in resp.text
     assert "form-cadastro" in resp.text
+    assert "cad-confirmar-senha" in resp.text
 
 
 def test_pagina_ficha_planta(client):
@@ -27,6 +32,8 @@ def test_pagina_ficha_planta(client):
     assert "aba-descricao" in resp.text
     assert "aba-cuidados" in resp.text
     assert "aba-receitas" in resp.text
+    assert "grid-sazonalidade" in resp.text
+    assert "mapa-brasil" in resp.text
 
 
 def test_arquivos_estaticos_frontend(client):

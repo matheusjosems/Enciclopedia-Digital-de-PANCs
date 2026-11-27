@@ -1,52 +1,85 @@
-/* Estilos adicionais e refinamentos para o tema botânico */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700;800&display=swap');
+
 :root {
-  --primary: #059669;
-  --primary-dark: #047857;
-  --primary-light: #ecfdf5;
-  --accent: #d97706;
+  --panc-green: #048A45;
+  --panc-green-dark: #036934;
+  --panc-mint: #EEFAEF;
+  --panc-mint-soft: #DFF4E2;
+  --panc-caramel: #B85A00;
+  --panc-caramel-dark: #964800;
+  --panc-ink: #0F291E;
 }
 
 body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  background-color: #f8fafc;
-  color: #1e293b;
+  font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  background-color: var(--panc-green);
+  color: var(--panc-ink);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-/* Transições suaves */
+.panc-card {
+  background-color: var(--panc-mint);
+  border-radius: 1.25rem;
+  box-shadow: 0 12px 28px -8px rgba(3, 55, 28, 0.28);
+}
+
+.btn-caramel {
+  background-color: var(--panc-caramel);
+  color: #ffffff;
+  font-weight: 700;
+  border-radius: 0.75rem;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.btn-caramel:hover:not(:disabled) {
+  background-color: var(--panc-caramel-dark);
+  transform: translateY(-1px);
+}
+
+.btn-outline-mint {
+  background-color: #ffffff;
+  color: var(--panc-ink);
+  font-weight: 600;
+  border: 1.5px solid #93C5A3;
+  border-radius: 0.75rem;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-outline-mint:hover:not(:disabled) {
+  background-color: #f0fdf4;
+  border-color: var(--panc-green);
+}
+
 .card-transition {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card-transition:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 25px -5px rgba(5, 150, 105, 0.15), 0 8px 10px -6px rgba(5, 150, 105, 0.1);
-}
-
-/* Scrollbar personalizada */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: #f1f5f9;
-}
-::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px -6px rgba(3, 105, 52, 0.22);
 }
 
 /* Badge de bioma */
 .badge-bioma {
-  background-color: #e0f2fe;
-  color: #0369a1;
-  font-size: 0.75rem;
-  font-weight: 600;
+  background-color: #DFF4E2;
+  color: #036934;
+  font-size: 0.7rem;
+  font-weight: 700;
   padding: 0.2rem 0.55rem;
   border-radius: 9999px;
   display: inline-block;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #036934;
+}
+::-webkit-scrollbar-thumb {
+  background: #a7f3d0;
+  border-radius: 4px;
 }

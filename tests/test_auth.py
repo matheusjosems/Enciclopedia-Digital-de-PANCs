@@ -115,3 +115,17 @@ def test_cadastro_nome_duplicado(client):
 def test_usuario_me_token_invalido(client):
     resp = client.get("/usuarios/me", headers={"Authorization": "Bearer token-falso-invalido"})
     assert resp.status_code == 401
+
+
+def test_login_por_nome_usuario(client):
+    client.post("/auth/cadastro", json={
+        "nome": "tamandua_user",
+        "email": "tamandua@ceub.br",
+        "senha": "senhaTamandua123"
+    })
+    resp = client.post("/auth/login", json={
+        "email": "tamandua_user",
+        "senha": "senhaTamandua123"
+    })
+    assert resp.status_code == 200
+    assert "access_token" in resp.json()

@@ -3,153 +3,190 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ficha da Planta — Enciclopédia de PANCs</title>
+  <title>Ficha da Planta — Enciclopédia Digital de PANCs</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="/static/styles.css">
 </head>
-<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
+<body class="text-[#0F291E] flex flex-col min-h-screen">
 
   <div id="navbar-container"></div>
 
-  <main class="max-w-5xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full">
-    <!-- Breadcrumb de Navegação -->
-    <nav class="flex items-center space-x-2 text-xs sm:text-sm text-slate-500 mb-6">
-      <a href="/" class="hover:text-emerald-700 transition">Catálogo</a>
-      <span>/</span>
-      <span id="breadcrumb-nome" class="text-slate-800 font-semibold">Carregando...</span>
-    </nav>
-
-    <!-- Loading State -->
-    <div id="loading-planta" class="flex justify-center items-center py-24">
-      <div class="animate-spin rounded-full h-12 w-12 border-4 border-emerald-600 border-t-transparent"></div>
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8 flex-1 w-full space-y-5">
+    <!-- Barra superior idêntica à Tela 4 do PDF -->
+    <div class="flex flex-wrap items-center justify-between gap-2 text-xs sm:text-sm">
+      <a href="/minha-colecao" id="link-voltar-biblioteca" class="text-[#0A2918] hover:text-white font-semibold transition">
+        ← Voltar para a biblioteca
+      </a>
+      <span id="meta-planta" class="text-[#0A2918] font-medium">
+        Planta #01 de 63 · ficha oficial
+      </span>
     </div>
 
-    <!-- Conteúdo da Ficha -->
-    <div id="conteudo-planta" class="hidden space-y-8">
-      
-      <!-- Cartão Principal / Hero da PANC -->
-      <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden grid grid-cols-1 md:grid-cols-2 gap-6 p-6 sm:p-8">
-        <!-- Foto da Espécie -->
-        <div class="relative h-72 sm:h-96 rounded-2xl overflow-hidden bg-slate-100 shadow-inner">
-          <img 
-            id="foto-planta" 
-            src="" 
-            alt="Foto da PANC" 
-            class="w-full h-full object-cover"
-            onerror="this.src='https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=500&auto=format&fit=crop&q=60'"
-          >
-          <span id="badge-familia" class="absolute top-4 left-4 bg-slate-900/80 backdrop-blur-sm text-white text-xs font-semibold px-3 py-1.5 rounded-full">
-            Família Botânica
-          </span>
+    <!-- Loading -->
+    <div id="loading-planta" class="flex justify-center items-center py-24">
+      <div class="animate-spin rounded-full h-12 w-12 border-4 border-white border-t-transparent"></div>
+    </div>
+
+    <!-- Conteúdo da Ficha (Layout 2 colunas da Tela 4 do PDF) -->
+    <div id="conteudo-planta" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+      <!-- COLUNA ESQUERDA (Foto + Nome + Sazonalidade + Mapa do Brasil) -->
+      <div class="lg:col-span-5 space-y-5">
+        <!-- Foto da planta -->
+        <div class="panc-card p-3">
+          <div class="relative h-64 sm:h-72 rounded-xl overflow-hidden bg-slate-200 flex items-center justify-center">
+            <img
+              id="foto-planta"
+              src=""
+              alt="Foto da planta"
+              class="w-full h-full object-cover"
+              onerror="this.src='https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=500&auto=format&fit=crop&q=60'"
+            >
+          </div>
         </div>
 
-        <!-- Dados e Título -->
-        <div class="flex flex-col justify-between space-y-4">
+        <!-- Card Nome + Sazonalidade -->
+        <div class="panc-card p-6 space-y-4">
           <div>
-            <span class="text-xs font-semibold uppercase tracking-wider text-emerald-700">Ficha Técnica Oficial</span>
-            <h1 id="nome-popular" class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-1">Nome Popular</h1>
-            <p id="nome-cientifico" class="text-base sm:text-lg italic text-slate-500 font-medium">Nome científico</p>
+            <h1 id="nome-popular" class="text-2xl font-bold text-[#0F291E]">Nome Popular</h1>
+            <p id="nome-cientifico" class="text-sm italic text-[#2B5440]">Nome científico</p>
+            <p id="badge-familia" class="text-xs text-[#048A45] font-semibold mt-1"></p>
+          </div>
 
-            <div class="mt-4 pt-4 border-t border-slate-100 space-y-3">
+          <div class="space-y-2 pt-2 border-t border-emerald-200/70">
+            <h2 class="text-xs font-bold uppercase tracking-wider text-[#0F291E]">Sazonalidade</h2>
+            <div id="grid-sazonalidade" class="grid grid-cols-6 gap-1.5 text-[11px] font-bold text-center"></div>
+            <p class="text-[11px] text-[#2B5440]">Meses destacados: quando a planta está disponível.</p>
+          </div>
+
+          <!-- Ação Salvar na Coleção -->
+          <div class="pt-3 border-t border-emerald-200/70 space-y-2">
+            <button
+              id="btn-adicionar-colecao"
+              class="btn-caramel w-full py-2.5 px-4 text-xs sm:text-sm shadow-sm"
+            >
+              ⭐ Salvar na minha enciclopédia
+            </button>
+            <p id="msg-colecao" class="text-xs text-center font-medium"></p>
+          </div>
+        </div>
+
+        <!-- Card Mapa em Grade do Brasil (Onde encontrar no Brasil) -->
+        <div class="panc-card p-6 space-y-4">
+          <h2 class="text-sm font-bold text-[#0F291E]">Onde encontrar no Brasil</h2>
+          <div id="mapa-brasil" class="space-y-1.5 flex flex-col items-center"></div>
+          <div class="flex items-center justify-center gap-5 text-[11px] text-[#2B5440] pt-1">
+            <span class="flex items-center gap-1.5">
+              <span class="w-3 h-3 rounded-sm bg-[#B85A00] inline-block"></span>
+              Pode ser encontrada
+            </span>
+            <span class="flex items-center gap-1.5">
+              <span class="w-3 h-3 rounded-sm bg-slate-300 inline-block"></span>
+              Não destacada
+            </span>
+          </div>
+          <div id="lista-regioes" class="flex flex-wrap justify-center gap-1.5 pt-1"></div>
+        </div>
+      </div>
+
+      <!-- COLUNA DIREITA (Descrição/Cuidados + Receitas) -->
+      <div class="lg:col-span-7 space-y-5">
+        <!-- Card Descrição / Partes Comestíveis & Cuidados -->
+        <div class="panc-card overflow-hidden">
+          <!-- Abas interativas responsivas -->
+          <div class="flex overflow-x-auto border-b border-emerald-200 bg-white/60 text-xs font-bold">
+            <button class="aba-btn active whitespace-nowrap py-3.5 px-4 sm:px-5 text-[#048A45] border-b-2 border-[#048A45] bg-[#EEFAEF] transition" data-aba="descricao">
+              Descrição
+            </button>
+            <button class="aba-btn whitespace-nowrap py-3.5 px-4 sm:px-5 text-slate-600 hover:text-[#0F291E] border-b-2 border-transparent transition" data-aba="cuidados">
+              Partes Comestíveis & Cuidados
+            </button>
+            <button class="aba-btn whitespace-nowrap py-3.5 px-4 sm:px-5 text-slate-600 hover:text-[#0F291E] border-b-2 border-transparent transition" data-aba="receitas">
+              Receitas (<span id="cont-receitas">0</span>)
+            </button>
+          </div>
+
+          <div id="aba-descricao" class="p-6 space-y-4">
+            <div>
+              <h3 class="text-base font-bold text-[#0F291E]">Descrição</h3>
+              <p id="texto-descricao" class="text-xs sm:text-sm text-[#1B3A2C] leading-relaxed whitespace-pre-line mt-1.5"></p>
+            </div>
+            <div class="pt-3 border-t border-emerald-200/70 grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <span class="text-xs font-bold text-slate-400 uppercase tracking-wide">Perfil de Sabor:</span>
-                <p id="sabor-planta" class="text-sm font-medium text-slate-700 mt-0.5">Suave, terroso</p>
+                <h4 class="text-xs font-bold uppercase text-[#0F291E]">Perfil de Sabor</h4>
+                <p id="sabor-planta" class="text-xs sm:text-sm text-[#1B3A2C] mt-1"></p>
               </div>
-
               <div>
-                <span class="text-xs font-bold text-slate-400 uppercase tracking-wide">Ocorrência Regional / Biomas:</span>
-                <div id="lista-regioes" class="flex flex-wrap gap-1.5 mt-1">
-                  <!-- Regiões dinâmicas -->
-                </div>
+                <h4 class="text-xs font-bold uppercase text-[#0F291E]">Partes Comestíveis</h4>
+                <p id="resumo-partes" class="text-xs sm:text-sm text-[#1B3A2C] mt-1"></p>
               </div>
             </div>
           </div>
 
-          <!-- Ação Rápida de Coleção -->
-          <div class="pt-4 border-t border-slate-100">
-            <button 
-              id="btn-adicionar-colecao"
-              class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-4 rounded-xl shadow-md transition flex items-center justify-center space-x-2 text-sm sm:text-base"
-            >
-              <span>⭐</span>
-              <span>Adicionar à Minha Coleção</span>
-            </button>
-            <p id="msg-colecao" class="text-xs text-center mt-2 font-medium"></p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Abas de Informações Detalhadas -->
-      <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
-        <!-- Navegação das Abas -->
-        <div class="flex overflow-x-auto border-b border-slate-200 bg-slate-50/70 text-xs sm:text-sm font-semibold">
-          <button class="aba-btn active whitespace-nowrap py-4 px-4 sm:px-6 text-emerald-800 border-b-2 border-emerald-600 bg-white transition" data-aba="descricao">
-            📖 Descrição Botânica
-          </button>
-          <button class="aba-btn whitespace-nowrap py-4 px-4 sm:px-6 text-slate-500 hover:text-slate-800 border-b-2 border-transparent transition" data-aba="cuidados">
-            ⚠️ Partes Comestíveis & Cuidados
-          </button>
-          <button class="aba-btn whitespace-nowrap py-4 px-4 sm:px-6 text-slate-500 hover:text-slate-800 border-b-2 border-transparent transition" data-aba="receitas">
-            🍳 Receitas Culinárias (<span id="cont-receitas">0</span>)
-          </button>
-        </div>
-
-        <!-- Conteúdo da Aba Descrição -->
-        <div id="aba-descricao" class="p-6 sm:p-8 space-y-4">
-          <h3 class="text-lg font-bold text-slate-800">Sobre a Espécie</h3>
-          <p id="texto-descricao" class="text-slate-600 leading-relaxed whitespace-pre-line text-sm sm:text-base">
-            Informações detalhadas sobre a planta...
-          </p>
-        </div>
-
-        <!-- Conteúdo da Aba Cuidados / Partes Comestíveis (RF06, RF14) -->
-        <div id="aba-cuidados" class="hidden p-6 sm:p-8 space-y-6">
-          <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-5">
-            <h4 class="text-emerald-900 font-bold text-base flex items-center space-x-2">
-              <span>🥗</span>
-              <span>Partes Comestíveis</span>
-            </h4>
-            <p id="texto-partes" class="text-emerald-800 text-sm mt-1">Folhas, flores e brotos jovens.</p>
+          <div id="aba-cuidados" class="hidden p-6 space-y-4">
+            <div class="bg-white border border-emerald-200 rounded-xl p-4">
+              <h4 class="text-sm font-bold text-[#048A45]">🥗 Partes Comestíveis</h4>
+              <p id="texto-partes" class="text-xs sm:text-sm text-[#1B3A2C] mt-1"></p>
+            </div>
+            <div class="bg-amber-50 border border-amber-300 rounded-xl p-4">
+              <h4 class="text-sm font-bold text-[#964800]">⚠️ Cuidados no Preparo e Consumo</h4>
+              <p id="texto-cuidados" class="text-xs sm:text-sm text-amber-900 mt-1 whitespace-pre-line"></p>
+            </div>
+            <div class="bg-white/80 border border-emerald-200 rounded-xl p-3 text-[11px] text-[#2B5440]">
+              <strong>Aviso de Segurança Alimentar (RF14):</strong> A identificação botânica deve ser sempre confirmada antes do consumo de qualquer espécie espontânea.
+            </div>
           </div>
 
-          <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5">
-            <h4 class="text-amber-900 font-bold text-base flex items-center space-x-2">
-              <span>⚠️</span>
-              <span>Cuidados no Preparo e Consumo</span>
-            </h4>
-            <p id="texto-cuidados" class="text-amber-800 text-sm mt-1 whitespace-pre-line">
-              Recomendações e precauções botânicas...
-            </p>
-          </div>
-
-          <div class="bg-slate-100 rounded-2xl p-4 text-xs text-slate-500">
-            <strong>Aviso de Segurança Alimentar (RF14):</strong> A identificação botânica deve ser sempre confirmada com fontes seguras ou especialistas antes do consumo de qualquer espécie silvestre.
+          <div id="aba-receitas" class="hidden p-6 space-y-4">
+            <p class="text-xs text-[#2B5440]">Veja também o bloco completo de receitas logo abaixo.</p>
+            <div id="lista-receitas-aba" class="space-y-3"></div>
           </div>
         </div>
 
-        <!-- Conteúdo da Aba Receitas (RF07, RF13) -->
-        <div id="aba-receitas" class="hidden p-6 sm:p-8 space-y-6">
-          <div class="flex justify-between items-center">
-            <h3 class="text-lg font-bold text-slate-800">Receitas Sugeridas</h3>
-            <span class="text-xs text-slate-500 font-medium">Extraído da sabedoria gastronômica regional</span>
-          </div>
-
-          <div id="lista-receitas-grid" class="grid grid-cols-1 gap-6">
-            <!-- Cards de receitas inseridos via JS -->
-          </div>
+        <!-- Card Receitas (sempre visível como na Tela 4 do PDF) -->
+        <div class="panc-card p-6 space-y-4">
+          <h2 class="text-lg font-bold text-[#0F291E]">Receitas</h2>
+          <div id="lista-receitas-grid" class="space-y-3"></div>
         </div>
       </div>
 
     </div>
   </main>
 
-  <footer class="bg-slate-900 text-slate-400 py-6 text-center text-xs">
-    <p>🌿 Enciclopédia Digital de PANCs — Ciência da Computação (CEUB)</p>
+  <footer class="bg-[#036934] text-emerald-100 py-5 text-center text-xs border-t border-emerald-300/20">
+    <p>🌿 <strong>Enciclopédia Digital de PANCs</strong> — Ciência da Computação (CEUB)</p>
   </footer>
 
   <script src="/static/app.js"></script>
   <script>
-    // Extrai o ID da planta a partir da URL (/planta/{id})
+    const MESES = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
+
+    // Grade cartográfica do Brasil conforme Tela 4 do PDF
+    const GRADE_BRASIL = [
+      [null, null, "RR", null, "AP", null, null],
+      [null, "AM", null, "PA", "MA", "CE", "RN"],
+      ["AC", "RO", "MT", "TO", "PI", "PE", "PB"],
+      [null, null, "MS", "GO", "DF", "BA", "AL", "SE"],
+      [null, null, null, "SP", "MG", "ES"],
+      [null, null, null, "PR", "RJ"],
+      [null, null, null, "SC"],
+      [null, null, null, "RS"]
+    ];
+
+    const REGIAO_PARA_UFS = {
+      "norte": ["AC", "AP", "AM", "PA", "RO", "RR", "TO"],
+      "amazônia": ["AC", "AP", "AM", "PA", "RO", "RR", "TO", "MA", "MT"],
+      "nordeste": ["AL", "BA", "CE", "MA", "PB", "PE", "PI", "RN", "SE"],
+      "caatinga": ["AL", "BA", "CE", "PB", "PE", "PI", "RN", "SE", "MG"],
+      "centro-oeste": ["DF", "GO", "MT", "MS"],
+      "cerrado": ["GO", "DF", "MT", "MS", "TO", "MG", "BA", "MA", "PI", "SP"],
+      "pantanal": ["MT", "MS"],
+      "sudeste": ["ES", "MG", "RJ", "SP"],
+      "mata atlântica": ["ES", "MG", "RJ", "SP", "PR", "SC", "RS", "BA", "AL", "SE", "PE", "PB", "RN"],
+      "sul": ["PR", "RS", "SC"],
+      "pampa": ["RS"]
+    };
+
     function getIdPlantaFromUrl() {
       const pathParts = window.location.pathname.split("/").filter(Boolean);
       const ultimo = pathParts[pathParts.length - 1];
@@ -158,89 +195,117 @@
       return parseInt(urlParams.get("id")) || 1;
     }
 
+    function renderSazonalidade(sazonalidades) {
+      const ativos = new Set((sazonalidades || []).map(s => Number(s.mes)));
+      const grid = document.getElementById("grid-sazonalidade");
+      grid.innerHTML = MESES.map((nome, idx) => {
+        const mesNum = idx + 1;
+        const ativo = ativos.has(mesNum);
+        const cls = ativo
+          ? "bg-[#048A45] text-white"
+          : "bg-slate-200 text-slate-600";
+        return `<span class="${cls} py-1.5 rounded-md">${nome}</span>`;
+      }).join("");
+    }
+
+    function renderMapaBrasil(regioes) {
+      const ufsAtivas = new Set();
+      (regioes || []).forEach(r => {
+        const chave = (r.nome || "").trim().toLowerCase();
+        const lista = REGIAO_PARA_UFS[chave] || [];
+        lista.forEach(uf => ufsAtivas.add(uf));
+      });
+
+      const mapa = document.getElementById("mapa-brasil");
+      mapa.innerHTML = GRADE_BRASIL.map(linha => {
+        const celulas = linha.map(uf => {
+          if (!uf) return `<span class="w-7 h-7 inline-block"></span>`;
+          const ativa = ufsAtivas.has(uf);
+          const cls = ativa
+            ? "bg-[#B85A00] text-white"
+            : "bg-slate-200 text-slate-600";
+          return `<span class="${cls} w-7 h-7 rounded-md text-[10px] font-bold flex items-center justify-center">${uf}</span>`;
+        }).join("");
+        return `<div class="flex gap-1">${celulas}</div>`;
+      }).join("");
+    }
+
+    function criarCardReceita(r) {
+      const cardRec = document.createElement("div");
+      cardRec.className = "bg-white border border-emerald-200/80 rounded-xl p-4 sm:p-5 space-y-2";
+      cardRec.innerHTML = `
+        <div class="flex flex-wrap justify-between items-center gap-2">
+          <h4 class="text-sm sm:text-base font-bold text-[#0F291E]">${escapeHtml(r.titulo)}</h4>
+          <span class="text-[11px] text-[#2B5440]">
+            ⏱️ ${escapeHtml(r.tempo_preparo || '20 min')} · 🍽️ ${escapeHtml(r.rendimento || '2 porções')}
+          </span>
+        </div>
+        <p class="text-xs text-[#1B3A2C]"><strong>Ingredientes:</strong> ${escapeHtml(r.ingredientes)}</p>
+        <p class="text-xs text-[#1B3A2C] whitespace-pre-line"><strong>Preparo:</strong> ${escapeHtml(r.modo_preparo)}</p>
+      `;
+      return cardRec;
+    }
+
     async function carregarFichaPlanta() {
       const id = getIdPlantaFromUrl();
       const loading = document.getElementById("loading-planta");
       const conteudo = document.getElementById("conteudo-planta");
 
+      if (!getToken()) {
+        document.getElementById("link-voltar-biblioteca").href = "/#biblioteca";
+      }
+
       try {
-        // Busca os dados da planta
         const resPlanta = await apiFetch(`/plantas/${id}`);
         if (!resPlanta.ok) throw new Error("Planta não encontrada no catálogo.");
         const planta = await resPlanta.json();
 
-        // Busca as receitas da planta
         const resRec = await apiFetch(`/plantas/${id}/receitas`);
         const receitas = resRec.ok ? await resRec.json() : [];
 
-        // Preenche dados na tela
-        document.getElementById("breadcrumb-nome").textContent = planta.nome_popular;
+        document.getElementById("meta-planta").textContent = `Planta #${String(planta.id_planta).padStart(2, "0")} de 63 · ficha oficial`;
         document.getElementById("nome-popular").textContent = planta.nome_popular;
         document.getElementById("nome-cientifico").textContent = planta.nome_cientifico;
-        document.getElementById("badge-familia").textContent = planta.familia || "PANC do Cerrado";
-        document.getElementById("sabor-planta").textContent = planta.sabor || "Neutro, suave e aromático.";
+        document.getElementById("badge-familia").textContent = planta.familia ? `Família ${planta.familia}` : "Espécie PANC";
+        document.getElementById("sabor-planta").textContent = planta.sabor || "Suave e herbáceo.";
         document.getElementById("texto-descricao").textContent = planta.descricao || "Descrição botânica da espécie.";
+        document.getElementById("resumo-partes").textContent = planta.partes_comestiveis || "Folhas e partes aéreas.";
         document.getElementById("texto-partes").textContent = planta.partes_comestiveis || "Folhas e partes aéreas.";
-        document.getElementById("texto-cuidados").textContent = planta.cuidados || "Lavar bem em água corrente e preparar refogado ou cozido.";
+        document.getElementById("texto-cuidados").textContent = planta.cuidados || "Lavar bem em água corrente e confirmar identificação antes do consumo.";
 
         const fotoEl = document.getElementById("foto-planta");
         fotoEl.src = planta.foto_url || "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=500&auto=format&fit=crop&q=60";
 
-        // Regiões
-        const containerRegioes = document.getElementById("lista-regioes");
-        containerRegioes.innerHTML = (planta.regioes || []).map(r => 
-          `<span class="badge-bioma">${escapeHtml(r.nome)}</span>`
-        ).join(" ") || '<span class="text-xs text-slate-400">Ampla distribuição</span>';
+        renderSazonalidade(planta.sazonalidades);
+        renderMapaBrasil(planta.regioes);
 
-        // Receitas
+        const containerRegioes = document.getElementById("lista-regioes");
+        containerRegioes.innerHTML = (planta.regioes || []).map(r =>
+          `<span class="badge-bioma">${escapeHtml(r.nome)}</span>`
+        ).join(" ");
+
         document.getElementById("cont-receitas").textContent = receitas.length;
         const gridRec = document.getElementById("lista-receitas-grid");
+        const gridAba = document.getElementById("lista-receitas-aba");
         gridRec.innerHTML = "";
+        gridAba.innerHTML = "";
 
         if (receitas.length === 0) {
-          gridRec.innerHTML = `
-            <div class="text-center py-8 text-slate-400">
-              <span>🍳</span>
-              <p class="text-sm mt-1">Nenhuma receita cadastrada especificamente para esta planta ainda.</p>
-            </div>
-          `;
+          gridRec.innerHTML = `<p class="text-xs text-[#2B5440]">Nenhuma receita cadastrada especificamente para esta planta ainda.</p>`;
+          gridAba.innerHTML = gridRec.innerHTML;
         } else {
           receitas.forEach(r => {
-            const cardRec = document.createElement("div");
-            cardRec.className = "bg-slate-50 border border-slate-200 rounded-2xl p-6 space-y-4 shadow-sm";
-            cardRec.innerHTML = `
-              <div class="flex justify-between items-start flex-wrap gap-2">
-                <div>
-                  <h4 class="text-lg font-bold text-emerald-900">${escapeHtml(r.titulo)}</h4>
-                  <div class="flex items-center space-x-4 text-xs text-slate-500 mt-1">
-                    <span>⏱️ Tempo: ${escapeHtml(r.tempo_preparo || '20 min')}</span>
-                    <span>🍽️ Rendimento: ${escapeHtml(r.rendimento || '2 a 4 porções')}</span>
-                  </div>
-                </div>
-              </div>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-slate-200">
-                <div>
-                  <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Ingredientes:</span>
-                  <p class="text-sm text-slate-700 mt-1 whitespace-pre-line leading-relaxed">${escapeHtml(r.ingredientes)}</p>
-                </div>
-                <div>
-                  <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Modo de Preparo:</span>
-                  <p class="text-sm text-slate-700 mt-1 whitespace-pre-line leading-relaxed">${escapeHtml(r.modo_preparo)}</p>
-                </div>
-              </div>
-            `;
-            gridRec.appendChild(cardRec);
+            gridRec.appendChild(criarCardReceita(r));
+            gridAba.appendChild(criarCardReceita(r));
           });
         }
 
-        // Configuração do Botão Salvar na Coleção (RF08)
         const btnColecao = document.getElementById("btn-adicionar-colecao");
         const msgColecao = document.getElementById("msg-colecao");
-
         btnColecao.addEventListener("click", async () => {
           if (!getToken()) {
-            msgColecao.className = "text-xs text-center mt-2 font-medium text-amber-600";
-            msgColecao.innerHTML = "Faça <a href='/login' class='underline font-bold'>login</a> para salvar plantas na sua coleção pessoal.";
+            msgColecao.className = "text-xs text-center font-medium text-[#964800]";
+            msgColecao.innerHTML = "Faça <a href='/login' class='underline font-bold'>login</a> para salvar plantas na sua enciclopédia.";
             return;
           }
 
@@ -253,53 +318,50 @@
             });
 
             if (resCol.ok) {
-              msgColecao.className = "text-xs text-center mt-2 font-medium text-emerald-600";
-              msgColecao.textContent = "✅ Planta adicionada com sucesso à sua coleção!";
-              btnColecao.textContent = "⭐ Salva na Coleção";
-              btnColecao.classList.add("bg-emerald-800");
+              msgColecao.className = "text-xs text-center font-semibold text-[#048A45]";
+              msgColecao.textContent = "✅ Adicionada à sua enciclopédia!";
+              btnColecao.textContent = "⭐ Salva na enciclopédia";
             } else {
               const errData = await resCol.json();
-              msgColecao.className = "text-xs text-center mt-2 font-medium text-red-600";
-              msgColecao.textContent = errData.detail || "Erro ao salvar planta.";
+              msgColecao.className = "text-xs text-center font-medium text-red-700";
+              msgColecao.textContent = errData.detail || "Erro ao salvar.";
               btnColecao.disabled = false;
-              btnColecao.textContent = "⭐ Adicionar à Minha Coleção";
+              btnColecao.textContent = "⭐ Salvar na minha enciclopédia";
             }
           } catch (e) {
-            msgColecao.className = "text-xs text-center mt-2 font-medium text-red-600";
-            msgColecao.textContent = "Erro de conexão ao salvar na coleção.";
+            msgColecao.className = "text-xs text-center font-medium text-red-700";
+            msgColecao.textContent = "Erro de conexão.";
             btnColecao.disabled = false;
-            btnColecao.textContent = "⭐ Adicionar à Minha Coleção";
+            btnColecao.textContent = "⭐ Salvar na minha enciclopédia";
           }
         });
 
         loading.classList.add("hidden");
         conteudo.classList.remove("hidden");
-
       } catch (err) {
         loading.classList.add("hidden");
         document.querySelector("main").innerHTML = `
-          <div class="text-center py-16">
-            <span class="text-5xl">⚠️</span>
-            <h2 class="text-xl font-bold text-red-600 mt-4">Erro ao Carregar Ficha</h2>
-            <p class="text-slate-500 text-sm mt-1">${escapeHtml(err.message)}</p>
-            <a href="/" class="mt-6 inline-block bg-emerald-600 text-white text-sm font-semibold px-4 py-2 rounded-lg">Voltar ao Catálogo</a>
+          <div class="panc-card p-8 text-center space-y-3">
+            <span class="text-4xl">⚠️</span>
+            <h2 class="text-lg font-bold text-red-700">Erro ao Carregar Ficha</h2>
+            <p class="text-xs text-slate-600">${escapeHtml(err.message)}</p>
+            <a href="/" class="btn-caramel inline-block text-xs px-4 py-2">Voltar à biblioteca</a>
           </div>
         `;
       }
     }
 
-    // Controle de Abas
     document.addEventListener("DOMContentLoaded", () => {
       carregarFichaPlanta();
 
       document.querySelectorAll(".aba-btn").forEach(btn => {
         btn.addEventListener("click", () => {
           document.querySelectorAll(".aba-btn").forEach(b => {
-            b.classList.remove("active", "text-emerald-800", "border-emerald-600", "bg-white");
-            b.classList.add("text-slate-500", "border-transparent");
+            b.classList.remove("active", "text-[#048A45]", "border-[#048A45]", "bg-[#EEFAEF]");
+            b.classList.add("text-slate-600", "border-transparent");
           });
-          btn.classList.add("active", "text-emerald-800", "border-emerald-600", "bg-white");
-          btn.classList.remove("text-slate-500", "border-transparent");
+          btn.classList.add("active", "text-[#048A45]", "border-[#048A45]", "bg-[#EEFAEF]");
+          btn.classList.remove("text-slate-600", "border-transparent");
 
           const abaId = btn.getAttribute("data-aba");
           document.querySelectorAll("[id^='aba-']").forEach(div => div.classList.add("hidden"));

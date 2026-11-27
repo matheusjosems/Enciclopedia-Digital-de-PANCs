@@ -1,6 +1,7 @@
 from typing import Optional, List
 from pydantic import BaseModel, ConfigDict
 from schemas.regiao import RegiaoResponse
+from schemas.sazonalidade import PlantaSazonalidadeResponse
 
 
 class PlantaBase(BaseModel):
@@ -32,6 +33,7 @@ class PlantaUpdate(BaseModel):
 class PlantaResponse(PlantaBase):
     id_planta: int
     regioes: List[RegiaoResponse] = []
+    sazonalidades: List[PlantaSazonalidadeResponse] = []
 
     model_config = ConfigDict(from_attributes=True)
 

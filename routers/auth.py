@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Request
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 from database import get_db
 from models.usuario import Usuario
@@ -88,7 +89,13 @@ async def login(
             detail="E-mail e senha são obrigatórios."
         )
 
-    usuario = db.query(Usuario).filter(Usuario.email == email.strip().lower()).first()
+    identificador = email.strip()
+    usuario = db.query(Usuario).filter(
+        or_(
+            Usuario.email == identificador.lower(),
+            Usuario.nome == identificador
+        )
+    ).first()
 
     if not usuario or not verificar_senha(senha, usuario.senha_hash):
         raise HTTPException(
