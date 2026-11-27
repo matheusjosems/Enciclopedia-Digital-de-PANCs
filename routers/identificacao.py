@@ -1,4 +1,3 @@
-from pathlib import Path
 from fastapi import APIRouter, UploadFile, File, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from database import get_db
@@ -6,7 +5,11 @@ from models.receita import Receita
 from schemas.identificacao import IdentificacaoResponse, IdentificacaoAlternativa
 from schemas.receita import ReceitaResponse
 from utils.image_uploader import salvar_e_validar_imagem, UPLOADS_DIR
-from services.ia_service import identificar_planta_ia, AVISO_SEGURANCA_OBRIGATORIO
+from services.ia_service import (
+    identificar_planta_ia,
+    avaliar_confianca,
+    AVISO_SEGURANCA_OBRIGATORIO,
+)
 
 router = APIRouter(tags=["Identificação por IA"])
 
@@ -51,13 +54,17 @@ def identificar_planta(
             for alt in outras_alternativas
         ]
 
-        # 4. Retorna a resposta completa com o aviso obrigatório do RF14
+        # 4. Avalia limiar de confiança (RNF07) e retorna resposta completa com aviso obrigatório (RF14)
+        baixa_confianca, aviso_confianca = avaliar_confianca(confianca)
+
         return IdentificacaoResponse(
             id_planta=planta.id_planta,
             nome_popular=planta.nome_popular,
             nome_cientifico=planta.nome_cientifico,
             familia=planta.familia,
             confianca=confianca,
+            baixa_confianca=baixa_confianca,
+            aviso_confianca=aviso_confianca,
             foto_enviada_url=url_foto_salva,
             aviso_seguranca=AVISO_SEGURANCA_OBRIGATORIO,
             descricao=planta.descricao,
@@ -68,6 +75,7 @@ def identificar_planta(
         )
 
     except Exception as err:
+        caminho_imagem.unlink(missing_ok=True)
         # Fallback de Confiabilidade (RNF07): caso ocorra qualquer instabilidade no processamento
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

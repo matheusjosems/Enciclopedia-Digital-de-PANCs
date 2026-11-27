@@ -150,27 +150,27 @@
 
           // Tags de regiões (até 3)
           const tagsRegioes = (p.regioes || []).slice(0, 3).map(r => 
-            `<span class="badge-bioma">${r.nome}</span>`
+            `<span class="badge-bioma">${escapeHtml(r.nome)}</span>`
           ).join(" ");
 
           card.innerHTML = `
             <div>
               <div class="relative h-48 w-full bg-slate-100 overflow-hidden">
                 <img 
-                  src="${fotoUrl}" 
-                  alt="${p.nome_popular}" 
+                  src="${escapeHtml(fotoUrl)}" 
+                  alt="${escapeHtml(p.nome_popular)}" 
                   loading="lazy"
                   class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                   onerror="this.src='https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=500&auto=format&fit=crop&q=60'"
                 >
                 <span class="absolute top-3 right-3 bg-slate-900/70 backdrop-blur-sm text-white text-[11px] font-medium px-2.5 py-1 rounded-full">
-                  ${p.familia || 'Espécie PANC'}
+                  ${escapeHtml(p.familia || 'Espécie PANC')}
                 </span>
               </div>
               <div class="p-4 space-y-2">
-                <h3 class="font-bold text-base text-slate-900 leading-snug line-clamp-1">${p.nome_popular}</h3>
-                <p class="text-xs italic text-emerald-700 font-medium">${p.nome_cientifico}</p>
-                <p class="text-xs text-slate-500 line-clamp-2">${p.descricao || 'Espécie botânica com propriedades alimentícias e medicinais espontâneas.'}</p>
+                <h3 class="font-bold text-base text-slate-900 leading-snug line-clamp-1">${escapeHtml(p.nome_popular)}</h3>
+                <p class="text-xs italic text-emerald-700 font-medium">${escapeHtml(p.nome_cientifico)}</p>
+                <p class="text-xs text-slate-500 line-clamp-2">${escapeHtml(p.descricao || 'Espécie botânica com propriedades alimentícias e medicinais espontâneas.')}</p>
                 <div class="pt-2 flex flex-wrap gap-1.5">
                   ${tagsRegioes}
                 </div>
@@ -178,7 +178,7 @@
             </div>
             <div class="p-4 pt-0">
               <a 
-                href="/planta/${p.id_planta}" 
+                href="/planta/${encodeURIComponent(p.id_planta)}" 
                 class="block w-full text-center bg-emerald-50 hover:bg-emerald-600 text-emerald-800 hover:text-white font-semibold text-xs sm:text-sm py-2.5 rounded-xl border border-emerald-200 hover:border-emerald-600 transition duration-200"
               >
                 Ver Ficha & Receitas →
@@ -194,7 +194,7 @@
         vazio.innerHTML = `
           <span class="text-5xl">⚠️</span>
           <h3 class="mt-4 text-lg font-semibold text-red-600">Erro ao consultar catálogo</h3>
-          <p class="text-slate-500 text-sm">${err.message}</p>
+          <p class="text-slate-500 text-sm">${escapeHtml(err.message)}</p>
         `;
       }
     }

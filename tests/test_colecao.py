@@ -100,3 +100,16 @@ def test_remover_descoberta_sucesso(client, auth_alice):
     # Confirma que foi removida
     resp_check = client.get(f"/colecao/{id_colecao}", headers=headers_alice)
     assert resp_check.status_code == 404
+
+
+def test_colecao_sem_autenticacao_bloqueada_401(client):
+    assert client.get("/colecao").status_code == 401
+    assert client.post("/colecao", json={"id_planta": 1}).status_code == 401
+    assert client.get("/colecao/1").status_code == 401
+    assert client.delete("/colecao/1").status_code == 401
+
+
+def test_colecao_item_inexistente_404(client, auth_alice):
+    headers_alice = {"Authorization": auth_alice["Authorization"]}
+    assert client.get("/colecao/99999", headers=headers_alice).status_code == 404
+    assert client.delete("/colecao/99999", headers=headers_alice).status_code == 404

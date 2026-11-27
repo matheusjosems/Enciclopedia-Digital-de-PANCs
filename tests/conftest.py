@@ -98,6 +98,19 @@ def setup_test_database():
     Base.metadata.drop_all(bind=engine_test)
 
 
+@pytest.fixture(scope="session", autouse=True)
+def cleanup_test_uploads():
+    """Remove apenas arquivos gravados em uploads/ durante a execução da suíte pytest."""
+    from utils.image_uploader import UPLOADS_DIR
+
+    arquivos_antes = set(UPLOADS_DIR.iterdir()) if UPLOADS_DIR.exists() else set()
+    yield
+    if UPLOADS_DIR.exists():
+        for caminho in UPLOADS_DIR.iterdir():
+            if caminho not in arquivos_antes and caminho.is_file():
+                caminho.unlink(missing_ok=True)
+
+
 def override_get_db():
     db = TestingSessionLocal()
     try:

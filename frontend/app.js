@@ -4,6 +4,16 @@
 
 const API_BASE = "";
 
+// Escapa caracteres HTML para evitar injeção ao renderizar dados dinâmicos
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 // Gerenciamento de Token JWT no LocalStorage
 function getToken() {
   return localStorage.getItem("pancs_token");
@@ -79,7 +89,7 @@ function renderNavbar() {
               <span>📷</span>
               <span>Identificar IA</span>
             </a>
-            <a href="/colecao" class="hover:text-emerald-200 transition py-2 flex items-center space-x-1">
+            <a href="/minha-colecao" class="hover:text-emerald-200 transition py-2 flex items-center space-x-1">
               <span>📖</span>
               <span>Minha Coleção</span>
             </a>
@@ -93,7 +103,7 @@ function renderNavbar() {
                   <div class="flex items-center space-x-3">
                     <a href="/perfil" class="text-sm bg-emerald-700 hover:bg-emerald-600 px-3 py-1.5 rounded-full flex items-center space-x-2 transition">
                       <span>👤</span>
-                      <span class="font-semibold">${user.nome.split(" ")[0]}</span>
+                      <span class="font-semibold">${escapeHtml(user.nome.split(" ")[0])}</span>
                     </a>
                     <button onclick="logout()" class="text-xs text-emerald-200 hover:text-white underline">Sair</button>
                   </div>
@@ -121,13 +131,13 @@ function renderNavbar() {
       <div id="mobile-menu" class="hidden md:hidden bg-emerald-900 border-t border-emerald-700 px-4 pt-3 pb-4 space-y-2 text-sm font-medium">
         <a href="/" class="block text-emerald-100 hover:text-white py-2">Catálogo Geral</a>
         <a href="/identificar" class="block text-emerald-100 hover:text-white py-2">📷 Identificar por Foto</a>
-        <a href="/colecao" class="block text-emerald-100 hover:text-white py-2">📖 Minha Coleção</a>
+        <a href="/minha-colecao" class="block text-emerald-100 hover:text-white py-2">📖 Minha Coleção</a>
         <div class="pt-2 border-t border-emerald-800">
           ${
             token && user
               ? `
                 <div class="flex justify-between items-center py-2">
-                  <a href="/perfil" class="text-emerald-200">👤 Olá, ${user.nome}</a>
+                  <a href="/perfil" class="text-emerald-200">👤 Olá, ${escapeHtml(user.nome)}</a>
                   <button onclick="logout()" class="text-xs bg-red-600/80 px-2 py-1 rounded text-white">Sair</button>
                 </div>
               `

@@ -94,3 +94,24 @@ def test_usuario_me_autenticado(client, auth_alice):
     dados = resp.json()
     assert dados["email"] == auth_alice["email"]
     assert "total_descobertas" in dados
+    assert isinstance(dados["total_descobertas"], int)
+
+
+def test_cadastro_nome_duplicado(client):
+    client.post("/auth/cadastro", json={
+        "nome": "Nome Unico Pytest",
+        "email": "nome.unico1@ceub.br",
+        "senha": "senha123456"
+    })
+    resp = client.post("/auth/cadastro", json={
+        "nome": "Nome Unico Pytest",
+        "email": "nome.unico2@ceub.br",
+        "senha": "senha123456"
+    })
+    assert resp.status_code == 400
+    assert "nome" in resp.json()["detail"].lower()
+
+
+def test_usuario_me_token_invalido(client):
+    resp = client.get("/usuarios/me", headers={"Authorization": "Bearer token-falso-invalido"})
+    assert resp.status_code == 401

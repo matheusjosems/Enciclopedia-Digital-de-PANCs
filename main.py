@@ -61,3 +61,21 @@ def rota_login():
 def rota_ficha_planta(id: int):
     """Ficha completa da PANC com abas de descrição, cuidados e receitas."""
     return FileResponse(FRONTEND_DIR / "planta.html")
+
+
+@app.get("/identificar", response_class=FileResponse, tags=["Web"])
+def rota_identificar():
+    """Tela de identificação fotográfica com câmera do smartphone e IA (Dia 11)."""
+    return FileResponse(FRONTEND_DIR / "identificar.html")
+
+
+@app.get("/minha-colecao", response_class=FileResponse, tags=["Web"])
+def rota_minha_colecao():
+    """Galeria pessoal das PANCs descobertas pelo usuário autenticado (Dia 11)."""
+    return FileResponse(FRONTEND_DIR / "colecao.html")
+
+
+@app.get("/perfil", response_class=FileResponse, tags=["Web"])
+def rota_perfil():
+    """Página de perfil do usuário e distintivo de descobertas (Dia 11)."""
+    return FileResponse(FRONTEND_DIR / "perfil.html")

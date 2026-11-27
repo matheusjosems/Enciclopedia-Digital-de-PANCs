@@ -82,14 +82,14 @@
       <!-- Abas de Informações Detalhadas -->
       <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
         <!-- Navegação das Abas -->
-        <div class="flex border-b border-slate-200 bg-slate-50/70 text-sm font-semibold">
-          <button class="aba-btn active py-4 px-6 text-emerald-800 border-b-2 border-emerald-600 bg-white transition" data-aba="descricao">
+        <div class="flex overflow-x-auto border-b border-slate-200 bg-slate-50/70 text-xs sm:text-sm font-semibold">
+          <button class="aba-btn active whitespace-nowrap py-4 px-4 sm:px-6 text-emerald-800 border-b-2 border-emerald-600 bg-white transition" data-aba="descricao">
             📖 Descrição Botânica
           </button>
-          <button class="aba-btn py-4 px-6 text-slate-500 hover:text-slate-800 border-b-2 border-transparent transition" data-aba="cuidados">
+          <button class="aba-btn whitespace-nowrap py-4 px-4 sm:px-6 text-slate-500 hover:text-slate-800 border-b-2 border-transparent transition" data-aba="cuidados">
             ⚠️ Partes Comestíveis & Cuidados
           </button>
-          <button class="aba-btn py-4 px-6 text-slate-500 hover:text-slate-800 border-b-2 border-transparent transition" data-aba="receitas">
+          <button class="aba-btn whitespace-nowrap py-4 px-4 sm:px-6 text-slate-500 hover:text-slate-800 border-b-2 border-transparent transition" data-aba="receitas">
             🍳 Receitas Culinárias (<span id="cont-receitas">0</span>)
           </button>
         </div>
@@ -189,7 +189,7 @@
         // Regiões
         const containerRegioes = document.getElementById("lista-regioes");
         containerRegioes.innerHTML = (planta.regioes || []).map(r => 
-          `<span class="badge-bioma">${r.nome}</span>`
+          `<span class="badge-bioma">${escapeHtml(r.nome)}</span>`
         ).join(" ") || '<span class="text-xs text-slate-400">Ampla distribuição</span>';
 
         // Receitas
@@ -211,21 +211,21 @@
             cardRec.innerHTML = `
               <div class="flex justify-between items-start flex-wrap gap-2">
                 <div>
-                  <h4 class="text-lg font-bold text-emerald-900">${r.titulo}</h4>
+                  <h4 class="text-lg font-bold text-emerald-900">${escapeHtml(r.titulo)}</h4>
                   <div class="flex items-center space-x-4 text-xs text-slate-500 mt-1">
-                    <span>⏱️ Tempo: ${r.tempo_preparo || '20 min'}</span>
-                    <span>🍽️ Rendimento: ${r.rendimento || '2 a 4 porções'}</span>
+                    <span>⏱️ Tempo: ${escapeHtml(r.tempo_preparo || '20 min')}</span>
+                    <span>🍽️ Rendimento: ${escapeHtml(r.rendimento || '2 a 4 porções')}</span>
                   </div>
                 </div>
               </div>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-slate-200">
                 <div>
                   <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Ingredientes:</span>
-                  <p class="text-sm text-slate-700 mt-1 whitespace-pre-line leading-relaxed">${r.ingredientes}</p>
+                  <p class="text-sm text-slate-700 mt-1 whitespace-pre-line leading-relaxed">${escapeHtml(r.ingredientes)}</p>
                 </div>
                 <div>
                   <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Modo de Preparo:</span>
-                  <p class="text-sm text-slate-700 mt-1 whitespace-pre-line leading-relaxed">${r.modo_preparo}</p>
+                  <p class="text-sm text-slate-700 mt-1 whitespace-pre-line leading-relaxed">${escapeHtml(r.modo_preparo)}</p>
                 </div>
               </div>
             `;
@@ -281,7 +281,7 @@
           <div class="text-center py-16">
             <span class="text-5xl">⚠️</span>
             <h2 class="text-xl font-bold text-red-600 mt-4">Erro ao Carregar Ficha</h2>
-            <p class="text-slate-500 text-sm mt-1">${err.message}</p>
+            <p class="text-slate-500 text-sm mt-1">${escapeHtml(err.message)}</p>
             <a href="/" class="mt-6 inline-block bg-emerald-600 text-white text-sm font-semibold px-4 py-2 rounded-lg">Voltar ao Catálogo</a>
           </div>
         `;

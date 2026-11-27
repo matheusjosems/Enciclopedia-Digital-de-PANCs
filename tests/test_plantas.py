@@ -55,3 +55,9 @@ def test_detalhar_planta_inexistente_404(client):
     resp = client.get("/plantas/99999")
     assert resp.status_code == 404
     assert "não encontrada" in resp.json()["detail"].lower()
+
+
+def test_paginacao_plantas(client):
+    resp = client.get("/plantas?skip=0&limit=2")
+    assert resp.status_code == 200
+    assert len(resp.json()) == 2
